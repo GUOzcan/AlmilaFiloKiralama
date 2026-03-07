@@ -1,0 +1,119 @@
+import { loadVehicles, generateAlerts } from "../data/vehicleData";
+import { AlertCircle, AlertTriangle, ArrowLeft, Car } from "lucide-react";
+import { Link } from "react-router";
+import { motion } from "motion/react";
+import { useState } from "react";
+
+export function ControlPanel() {
+  const [vehicles] = useState(() => loadVehicles());
+  const alerts = generateAlerts(vehicles);
+
+  const totalVehicles = vehicles.length;
+  const yonetimCount = vehicles.filter(v => v.category === "Yönetim").length;
+  const ticariCount = vehicles.filter(v => v.category === "Ticari").length;
+  const redAlerts = alerts.filter((a) => a.status === "expired").length;
+  const yellowWarnings = alerts.filter((a) => a.status === "warning").length;
+
+  const containerVariants = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.08 } } };
+  const itemVariants = { hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: "easeOut" } } };
+
+  return (
+    <div className="min-h-screen bg-[#080808] text-white font-sans selection:bg-red-600 selection:text-white pb-24 relative overflow-hidden">
+      <div className="fixed top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[250px] bg-red-600/[0.025] blur-[90px] pointer-events-none" />
+
+      <div className="sticky top-0 z-20 bg-[#080808]/85 backdrop-blur-xl border-b border-white/[0.06] px-5 py-4 flex items-center justify-between">
+        <Link to="/" className="w-9 h-9 flex items-center justify-center rounded-full border border-white/[0.08] text-neutral-400 hover:text-white hover:border-white/20 transition-all">
+          <ArrowLeft className="w-4 h-4" />
+        </Link>
+        <span className="text-[10px] tracking-[0.35em] text-neutral-500 uppercase font-light">Kontrol Paneli</span>
+        <div className="w-9" />
+      </div>
+
+      <motion.div variants={containerVariants} initial="hidden" animate="show" className="max-w-lg mx-auto px-5 py-6 relative z-10">
+        {/* Stats */}
+        <motion.div variants={itemVariants} className="grid grid-cols-2 gap-3 mb-6">
+          <div className="col-span-2 bg-[#0d0d0d] border border-white/[0.07] rounded-2xl p-5 flex items-center justify-between">
+            <div>
+              <span className="block text-[9px] tracking-[0.35em] text-neutral-600 mb-2">TOPLAM ARAÇ</span>
+              <span className="text-4xl font-light tracking-wider">{totalVehicles}</span>
+            </div>
+            <div className="flex flex-col gap-1 items-end">
+              <div className="flex items-center gap-2 text-[9px] tracking-[0.2em] text-neutral-500">
+                <Car className="w-3 h-3" /> <span>YÖNETİM</span> <span className="text-white">{yonetimCount}</span>
+              </div>
+              <div className="flex items-center gap-2 text-[9px] tracking-[0.2em] text-neutral-500">
+                <Car className="w-3 h-3" /> <span>TİCARİ</span> <span className="text-white">{ticariCount}</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-[#0d0d0d] border border-red-500/20 rounded-2xl p-5 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-20 h-20 bg-red-500/10 rounded-full blur-2xl" />
+            <span className="block text-[8px] tracking-[0.3em] text-red-400/70 mb-2">KRİTİK</span>
+            <span className="text-3xl font-light text-white block mb-1">{redAlerts}</span>
+            <span className="text-[8px] tracking-[0.2em] text-red-500/60">SÜRESİ DOLMUŞ</span>
+          </div>
+
+          <div className="bg-[#0d0d0d] border border-amber-500/20 rounded-2xl p-5 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-20 h-20 bg-amber-500/10 rounded-full blur-2xl" />
+            <span className="block text-[8px] tracking-[0.3em] text-amber-400/70 mb-2">DİKKAT</span>
+            <span className="text-3xl font-light text-white block mb-1">{yellowWarnings}</span>
+            <span className="text-[8px] tracking-[0.2em] text-amber-500/60">YAKLAŞIYOR</span>
+          </div>
+        </motion.div>
+
+        {/* Alerts */}
+        <motion.div variants={itemVariants}>
+          <div className="flex items-center gap-3 mb-4">
+            <span className="text-[9px] tracking-[0.35em] text-neutral-600 uppercase">Bekleyen İşlemler</span>
+            <div className="flex-1 h-[1px] bg-white/[0.04]" />
+            {alerts.length > 0 && <span className="text-[8px] text-neutral-700">{alerts.length}</span>}
+          </div>
+
+          {alerts.length === 0 ? (
+            <div className="text-center py-12 bg-[#0d0d0d] border border-white/[0.07] rounded-2xl">
+              <p className="text-neutral-700 text-[9px] tracking-[0.3em] uppercase">Tüm Belgeler Geçerli ✓</p>
+            </div>
+          ) : (
+            <div className="space-y-2.5">
+              {alerts.map((alert) => (
+                <Link
+                  key={alert.id}
+                  to={`/vehicles/${alert.licensePlate.startsWith("0") ? "yonetim" : "ticari"}/${alert.vehicleId}`}
+                  className="block bg-[#0d0d0d] border border-white/[0.06] hover:border-white/[0.12] rounded-2xl p-4 relative overflow-hidden transition-all"
+                >
+                  <div className={`absolute left-0 top-0 w-0.5 h-full rounded-l-2xl ${alert.status === "expired" ? "bg-red-500" : "bg-amber-500"}`} />
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2.5">
+                      <span className="bg-white text-black px-2 py-0.5 text-[9px] font-bold tracking-widest rounded-sm">{alert.licensePlate}</span>
+                      <span className="text-xs font-light text-neutral-300">{alert.vehicleName}</span>
+                    </div>
+                    {alert.status === "expired" ? (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-red-500/10 text-red-400 border border-red-500/20 rounded-full text-[8px] tracking-[0.15em]">
+                        <AlertCircle className="w-2.5 h-2.5" /> SÜRESİ DOLMUŞ
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded-full text-[8px] tracking-[0.15em]">
+                        <AlertTriangle className="w-2.5 h-2.5" /> YAKLAŞIYOR
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex gap-4 pl-0.5">
+                    <div>
+                      <span className="text-[8px] text-neutral-700 tracking-widest">TÜR</span>
+                      <p className="text-[10px] text-neutral-400 mt-0.5">{alert.type}</p>
+                    </div>
+                    <div>
+                      <span className="text-[8px] text-neutral-700 tracking-widest">TARİH</span>
+                      <p className="text-[10px] text-neutral-400 mt-0.5">{alert.date}</p>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
+        </motion.div>
+      </motion.div>
+    </div>
+  );
+}

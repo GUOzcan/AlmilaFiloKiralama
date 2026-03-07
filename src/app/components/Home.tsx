@@ -5,13 +5,14 @@ import { motion } from "motion/react";
 export function Home() {
   return (
     <div
-      className="h-screen w-screen flex flex-col items-center justify-between overflow-hidden font-sans selection:bg-red-600 selection:text-white"
-      style={{ background: "radial-gradient(ellipse 100% 70% at 50% 0%, #2d0606 0%, #120202 45%, #080808 100%)" }}
+      className="w-screen flex flex-col items-center justify-between overflow-hidden font-sans selection:bg-red-600 selection:text-white"
+      style={{
+        height: "100dvh",
+        background: "radial-gradient(ellipse 100% 70% at 50% 0%, #2d0606 0%, #120202 45%, #080808 100%)"
+      }}
     >
-      {/* Üst kırmızı parlaklık */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-red-800/30 rounded-full blur-[120px] pointer-events-none" />
 
-      {/* LOGO — üst yarı */}
       <motion.div
         initial={{ opacity: 0, y: -16 }}
         animate={{ opacity: 1, y: 0 }}
@@ -21,17 +22,17 @@ export function Home() {
         <img
           src="/logo.png"
           alt="Almila Filo Kiralama"
-          className="w-full max-w-[300px] object-contain"
+          className="w-full max-w-[240px] object-contain"
           style={{ filter: "drop-shadow(0 0 40px rgba(180,20,20,0.4)) drop-shadow(0 0 12px rgba(180,20,20,0.25))" }}
         />
       </motion.div>
 
-      {/* KARTLAR — alt yarı */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
-        className="relative z-10 w-full px-6 pb-10 flex flex-col gap-3"
+        className="relative z-10 w-full px-6 flex flex-col gap-3"
+        style={{ paddingBottom: "max(24px, env(safe-area-inset-bottom))" }}
       >
         <Link
           to="/vehicles/yonetim"
@@ -61,10 +62,9 @@ export function Home() {
           <ChevronRight className="w-4 h-4 text-neutral-700 group-hover:text-red-500 transition-colors duration-300 relative z-10" />
         </Link>
 
-        {/* Kontrol Paneli */}
         <Link
           to="/kontrol-paneli"
-          className="group flex items-center justify-center gap-3 pt-2 pb-1"
+          className="group flex items-center justify-center gap-3 py-3"
         >
           <span className="w-5 h-[1px] bg-neutral-800 group-hover:bg-red-600 transition-colors duration-300" />
           <span className="text-[9px] text-neutral-700 group-hover:text-white tracking-[0.35em] uppercase transition-colors duration-300">Kontrol Paneli</span>

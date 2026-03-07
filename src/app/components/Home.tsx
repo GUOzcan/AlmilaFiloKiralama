@@ -21,7 +21,7 @@ export function Home() {
         <img
           src="/logo.png"
           alt="Almila Filo Kiralama"
-          className="w-full max-w-[200px] object-contain"
+          className="w-full max-w-[160px] object-contain"
           style={{ filter: "drop-shadow(0 0 40px rgba(180,20,20,0.4)) drop-shadow(0 0 12px rgba(180,20,20,0.25))" }}
         />
       </motion.div>

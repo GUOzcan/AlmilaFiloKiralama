@@ -4,87 +4,71 @@ import { motion } from "motion/react";
 
 export function Home() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-6 py-10 relative overflow-hidden font-sans selection:bg-red-600 selection:text-white"
-      style={{ background: "radial-gradient(ellipse 80% 60% at 50% 30%, #3a0a0a 0%, #1a0404 40%, #080808 100%)" }}
+    <div
+      className="h-screen w-screen flex flex-col items-center justify-between overflow-hidden font-sans selection:bg-red-600 selection:text-white"
+      style={{ background: "radial-gradient(ellipse 100% 70% at 50% 0%, #2d0606 0%, #120202 45%, #080808 100%)" }}
     >
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[300px] bg-red-900/40 rounded-full blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
+      {/* Üst kırmızı parlaklık */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-red-800/30 rounded-full blur-[120px] pointer-events-none" />
 
+      {/* LOGO — üst yarı */}
       <motion.div
-        initial={{ opacity: 0, y: -12 }}
+        initial={{ opacity: 0, y: -16 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1.1, ease: "easeOut" }}
-        className="relative z-10 mb-14 w-full max-w-xs flex items-center justify-center"
+        transition={{ duration: 1.0, ease: "easeOut" }}
+        className="relative z-10 flex-1 flex flex-col items-center justify-center w-full px-8"
       >
         <img
           src="/logo.png"
           alt="Almila Filo Kiralama"
-          className="w-72 h-72 object-contain"
-          style={{ filter: "drop-shadow(0 0 30px rgba(180,20,20,0.35))" }}
+          className="w-full max-w-[280px] object-contain"
+          style={{ filter: "drop-shadow(0 0 40px rgba(180,20,20,0.4)) drop-shadow(0 0 12px rgba(180,20,20,0.25))" }}
         />
       </motion.div>
 
-      <div className="relative z-10 w-full max-w-xs flex flex-col gap-4">
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.25, ease: "easeOut" }}
-        >
-          <Link
-            to="/vehicles/yonetim"
-            className="group relative flex items-center justify-between bg-black/40 border border-white/[0.08] hover:border-red-600/40 backdrop-blur-sm transition-all duration-500 p-6 rounded-2xl overflow-hidden"
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-red-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <div className="relative z-10 flex items-center gap-4">
-              <div className="w-10 h-10 rounded-xl border border-white/[0.08] group-hover:border-red-500/40 flex items-center justify-center transition-colors duration-400">
-                <Car className="w-5 h-5 text-neutral-500 group-hover:text-red-400 transition-colors duration-400" strokeWidth={1.5} />
-              </div>
-              <div>
-                <h2 className="text-sm font-light text-neutral-200 group-hover:text-white tracking-[0.3em] transition-colors duration-400">YÖNETİM</h2>
-                <p className="text-[9px] text-neutral-600 group-hover:text-red-500/60 tracking-[0.2em] mt-0.5 transition-colors duration-400">FİLO YÖNETİMİ</p>
-              </div>
-            </div>
-            <ChevronRight className="w-4 h-4 text-neutral-700 group-hover:text-red-500 transition-colors duration-400 relative z-10" />
-          </Link>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.35, ease: "easeOut" }}
-        >
-          <Link
-            to="/vehicles/ticari"
-            className="group relative flex items-center justify-between bg-black/40 border border-white/[0.08] hover:border-red-600/40 backdrop-blur-sm transition-all duration-500 p-6 rounded-2xl overflow-hidden"
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-red-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <div className="relative z-10 flex items-center gap-4">
-              <div className="w-10 h-10 rounded-xl border border-white/[0.08] group-hover:border-red-500/40 flex items-center justify-center transition-colors duration-400">
-                <Truck className="w-5 h-5 text-neutral-500 group-hover:text-red-400 transition-colors duration-400" strokeWidth={1.5} />
-              </div>
-              <div>
-                <h2 className="text-sm font-light text-neutral-200 group-hover:text-white tracking-[0.3em] transition-colors duration-400">TİCARİ</h2>
-                <p className="text-[9px] text-neutral-600 group-hover:text-red-500/60 tracking-[0.2em] mt-0.5 transition-colors duration-400">TİCARİ ARAÇLAR</p>
-              </div>
-            </div>
-            <ChevronRight className="w-4 h-4 text-neutral-700 group-hover:text-red-500 transition-colors duration-400 relative z-10" />
-          </Link>
-        </motion.div>
-      </div>
-
+      {/* KARTLAR — alt yarı */}
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1.2, delay: 0.7 }}
-        className="absolute bottom-8 z-10"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
+        className="relative z-10 w-full px-6 pb-10 flex flex-col gap-3"
       >
         <Link
-          to="/kontrol-paneli"
-          className="group flex items-center gap-3 text-[9px] text-neutral-700 hover:text-white tracking-[0.35em] uppercase transition-colors duration-400"
+          to="/vehicles/yonetim"
+          className="group relative flex items-center justify-between bg-black/50 border border-white/[0.08] hover:border-red-600/50 active:border-red-600/50 backdrop-blur-sm transition-all duration-300 px-6 py-5 rounded-2xl overflow-hidden"
         >
-          <span className="w-6 h-[1px] bg-neutral-800 group-hover:bg-red-600 transition-colors duration-400" />
-          <span>Kontrol Paneli</span>
-          <ChevronRight className="w-3 h-3 group-hover:text-red-500 transition-colors duration-400" />
+          <div className="absolute inset-0 bg-gradient-to-r from-red-900/25 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="relative z-10 flex items-center gap-4">
+            <div className="w-10 h-10 rounded-xl border border-white/[0.08] group-hover:border-red-500/40 flex items-center justify-center transition-colors duration-300">
+              <Car className="w-5 h-5 text-neutral-500 group-hover:text-red-400 transition-colors duration-300" strokeWidth={1.5} />
+            </div>
+            <h2 className="text-sm font-light text-neutral-200 group-hover:text-white tracking-[0.35em] transition-colors duration-300">YÖNETİM</h2>
+          </div>
+          <ChevronRight className="w-4 h-4 text-neutral-700 group-hover:text-red-500 transition-colors duration-300 relative z-10" />
+        </Link>
+
+        <Link
+          to="/vehicles/ticari"
+          className="group relative flex items-center justify-between bg-black/50 border border-white/[0.08] hover:border-red-600/50 active:border-red-600/50 backdrop-blur-sm transition-all duration-300 px-6 py-5 rounded-2xl overflow-hidden"
+        >
+          <div className="absolute inset-0 bg-gradient-to-r from-red-900/25 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="relative z-10 flex items-center gap-4">
+            <div className="w-10 h-10 rounded-xl border border-white/[0.08] group-hover:border-red-500/40 flex items-center justify-center transition-colors duration-300">
+              <Truck className="w-5 h-5 text-neutral-500 group-hover:text-red-400 transition-colors duration-300" strokeWidth={1.5} />
+            </div>
+            <h2 className="text-sm font-light text-neutral-200 group-hover:text-white tracking-[0.35em] transition-colors duration-300">TİCARİ</h2>
+          </div>
+          <ChevronRight className="w-4 h-4 text-neutral-700 group-hover:text-red-500 transition-colors duration-300 relative z-10" />
+        </Link>
+
+        {/* Kontrol Paneli */}
+        <Link
+          to="/kontrol-paneli"
+          className="group flex items-center justify-center gap-3 pt-2 pb-1"
+        >
+          <span className="w-5 h-[1px] bg-neutral-800 group-hover:bg-red-600 transition-colors duration-300" />
+          <span className="text-[9px] text-neutral-700 group-hover:text-white tracking-[0.35em] uppercase transition-colors duration-300">Kontrol Paneli</span>
+          <span className="w-5 h-[1px] bg-neutral-800 group-hover:bg-red-600 transition-colors duration-300" />
         </Link>
       </motion.div>
     </div>

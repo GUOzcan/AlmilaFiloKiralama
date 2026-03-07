@@ -4,25 +4,26 @@ import { motion } from "motion/react";
 
 export function Home() {
   return (
-    <div className="min-h-screen bg-[#080808] flex flex-col items-center justify-center px-6 py-10 relative overflow-hidden font-sans selection:bg-red-600 selection:text-white">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] bg-red-700/[0.03] rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[400px] h-[200px] bg-red-600/[0.05] rounded-full blur-[80px] pointer-events-none" />
+    <div className="min-h-screen flex flex-col items-center justify-center px-6 py-10 relative overflow-hidden font-sans selection:bg-red-600 selection:text-white"
+      style={{ background: "radial-gradient(ellipse 80% 60% at 50% 30%, #3a0a0a 0%, #1a0404 40%, #080808 100%)" }}
+    >
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[300px] bg-red-900/40 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
 
-      {/* Logo */}
       <motion.div
-        initial={{ opacity: 0, y: -10 }}
+        initial={{ opacity: 0, y: -12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.1, ease: "easeOut" }}
-        className="relative z-10 mb-16 w-full max-w-xs flex items-center justify-center"
+        className="relative z-10 mb-14 w-full max-w-xs flex items-center justify-center"
       >
         <img
           src="/logo.png"
           alt="Almila Filo Kiralama"
-          className="w-64 h-64 object-contain drop-shadow-2xl"
+          className="w-72 h-72 object-contain"
+          style={{ filter: "drop-shadow(0 0 30px rgba(180,20,20,0.35))" }}
         />
       </motion.div>
 
-      {/* Category Cards */}
       <div className="relative z-10 w-full max-w-xs flex flex-col gap-4">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
@@ -31,16 +32,16 @@ export function Home() {
         >
           <Link
             to="/vehicles/yonetim"
-            className="group relative flex items-center justify-between bg-[#0d0d0d] border border-white/[0.07] hover:border-red-600/35 transition-all duration-500 p-6 rounded-2xl overflow-hidden"
+            className="group relative flex items-center justify-between bg-black/40 border border-white/[0.08] hover:border-red-600/40 backdrop-blur-sm transition-all duration-500 p-6 rounded-2xl overflow-hidden"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-red-600/6 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="absolute inset-0 bg-gradient-to-r from-red-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             <div className="relative z-10 flex items-center gap-4">
-              <div className="w-10 h-10 rounded-xl border border-white/[0.06] group-hover:border-red-500/30 flex items-center justify-center transition-colors duration-400">
-                <Car className="w-5 h-5 text-neutral-600 group-hover:text-red-500 transition-colors duration-400" strokeWidth={1.5} />
+              <div className="w-10 h-10 rounded-xl border border-white/[0.08] group-hover:border-red-500/40 flex items-center justify-center transition-colors duration-400">
+                <Car className="w-5 h-5 text-neutral-500 group-hover:text-red-400 transition-colors duration-400" strokeWidth={1.5} />
               </div>
               <div>
                 <h2 className="text-sm font-light text-neutral-200 group-hover:text-white tracking-[0.3em] transition-colors duration-400">YÖNETİM</h2>
-                <p className="text-[9px] text-neutral-700 group-hover:text-red-500/50 tracking-[0.2em] mt-0.5 transition-colors duration-400">FİLO YÖNETİMİ</p>
+                <p className="text-[9px] text-neutral-600 group-hover:text-red-500/60 tracking-[0.2em] mt-0.5 transition-colors duration-400">FİLO YÖNETİMİ</p>
               </div>
             </div>
             <ChevronRight className="w-4 h-4 text-neutral-700 group-hover:text-red-500 transition-colors duration-400 relative z-10" />
@@ -54,16 +55,16 @@ export function Home() {
         >
           <Link
             to="/vehicles/ticari"
-            className="group relative flex items-center justify-between bg-[#0d0d0d] border border-white/[0.07] hover:border-red-600/35 transition-all duration-500 p-6 rounded-2xl overflow-hidden"
+            className="group relative flex items-center justify-between bg-black/40 border border-white/[0.08] hover:border-red-600/40 backdrop-blur-sm transition-all duration-500 p-6 rounded-2xl overflow-hidden"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-red-600/6 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="absolute inset-0 bg-gradient-to-r from-red-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             <div className="relative z-10 flex items-center gap-4">
-              <div className="w-10 h-10 rounded-xl border border-white/[0.06] group-hover:border-red-500/30 flex items-center justify-center transition-colors duration-400">
-                <Truck className="w-5 h-5 text-neutral-600 group-hover:text-red-500 transition-colors duration-400" strokeWidth={1.5} />
+              <div className="w-10 h-10 rounded-xl border border-white/[0.08] group-hover:border-red-500/40 flex items-center justify-center transition-colors duration-400">
+                <Truck className="w-5 h-5 text-neutral-500 group-hover:text-red-400 transition-colors duration-400" strokeWidth={1.5} />
               </div>
               <div>
-                <h2 className="text-sm font-light text-neutral-200 group-hover:text-white tracking-[0.3em] transition-colors duration-400">YÖNETİM ARAÇLARI</h2>
-                <p className="text-[9px] text-neutral-700 group-hover:text-red-500/50 tracking-[0.2em] mt-0.5 transition-colors duration-400">TİCARİ ARAÇLAR</p>
+                <h2 className="text-sm font-light text-neutral-200 group-hover:text-white tracking-[0.3em] transition-colors duration-400">TİCARİ</h2>
+                <p className="text-[9px] text-neutral-600 group-hover:text-red-500/60 tracking-[0.2em] mt-0.5 transition-colors duration-400">TİCARİ ARAÇLAR</p>
               </div>
             </div>
             <ChevronRight className="w-4 h-4 text-neutral-700 group-hover:text-red-500 transition-colors duration-400 relative z-10" />
@@ -71,7 +72,6 @@ export function Home() {
         </motion.div>
       </div>
 
-      {/* Kontrol Paneli */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

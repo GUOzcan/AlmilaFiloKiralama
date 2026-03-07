@@ -16,7 +16,7 @@ export function Home() {
         className="relative z-10 mb-16 w-full max-w-xs flex items-center justify-center"
       >
         <img
-          src="/logo.png"
+          src="/logo.jpg"
           alt="Almila Filo Kiralama"
           className="w-64 h-64 object-contain drop-shadow-2xl"
         />

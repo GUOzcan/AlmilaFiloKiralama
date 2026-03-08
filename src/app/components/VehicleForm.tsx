@@ -14,7 +14,7 @@ export function VehicleForm() {
 
   const [formData, setFormData] = useState<Partial<Vehicle>>({
     category: categoryKey, licensePlate: "", model: "",
-    sigorta: emptyDoc, kasko: emptyDoc, mtv1: emptyDoc, mtv2: emptyDoc, muayene: emptyDoc,
+    sigorta: emptyDoc, kasko: emptyDoc, muayene: emptyDoc,
   })
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
@@ -37,8 +37,6 @@ export function VehicleForm() {
       ...formData, category: categoryKey,
       sigorta: formData.sigorta || emptyDoc,
       kasko: formData.kasko || emptyDoc,
-      mtv1: formData.mtv1 || emptyDoc,
-      mtv2: formData.mtv2 || emptyDoc,
       muayene: formData.muayene || emptyDoc,
     } as Omit<Vehicle, "id">
 
@@ -60,7 +58,8 @@ export function VehicleForm() {
 
   return (
     <div className="min-h-screen bg-[#080808] text-white font-sans pb-28 relative overflow-hidden">
-      <div className="sticky top-0 z-20 bg-[#080808]/85 backdrop-blur-xl border-b border-white/[0.06] px-5 py-4 flex items-center justify-between">
+      <div className="sticky top-0 z-20 bg-[#080808]/85 backdrop-blur-xl border-b border-white/[0.06] px-5 py-4 flex items-center justify-between"
+        style={{ paddingTop: 'max(16px, env(safe-area-inset-top))' }}>
         <Link to={isEdit ? `/vehicles/${category}/${id}` : `/vehicles/${category}`}
           className="w-9 h-9 flex items-center justify-center rounded-full border border-white/[0.08] text-neutral-400 hover:text-white transition-all">
           <ArrowLeft className="w-4 h-4" />
@@ -99,40 +98,9 @@ export function VehicleForm() {
           <FormField label="RUHSAT SAHİBİ" value={formData.registrationOwner || ""} onChange={v => setFormData({ ...formData, registrationOwner: v })} placeholder="Almila Grup A.Ş." />
         </FormSection>
 
-        <DocSection
-          title="SİGORTA"
-          note="Bitiş tarihini gir"
-          data={formData.sigorta!}
-          onChange={d => setFormData({ ...formData, sigorta: d })}
-          showAmount showInstitution
-        />
-        <DocSection
-          title="KASKO"
-          note="Bitiş tarihini gir"
-          data={formData.kasko!}
-          onChange={d => setFormData({ ...formData, kasko: d })}
-          showAmount showInstitution
-        />
-        <DocSection
-          title="MTV 1. TAKSİT"
-          note="Bitiş tarihini gir"
-          data={formData.mtv1!}
-          onChange={d => setFormData({ ...formData, mtv1: d })}
-          showAmount
-        />
-        <DocSection
-          title="MTV 2. TAKSİT"
-          note="Bitiş tarihini gir"
-          data={formData.mtv2!}
-          onChange={d => setFormData({ ...formData, mtv2: d })}
-          showAmount
-        />
-        <DocSection
-          title="MUAYENE"
-          note="Bitiş tarihini gir"
-          data={formData.muayene!}
-          onChange={d => setFormData({ ...formData, muayene: d })}
-        />
+        <DocSection title="SİGORTA BİTİŞ TARİHİ" data={formData.sigorta!} onChange={d => setFormData({ ...formData, sigorta: d })} />
+        <DocSection title="KASKO BİTİŞ TARİHİ"   data={formData.kasko!}   onChange={d => setFormData({ ...formData, kasko: d })} />
+        <DocSection title="MUAYENE BİTİŞ TARİHİ" data={formData.muayene!} onChange={d => setFormData({ ...formData, muayene: d })} />
       </div>
 
       <div className="fixed bottom-0 left-0 right-0 z-20 p-5 bg-gradient-to-t from-[#080808] via-[#080808]/90 to-transparent pointer-events-none flex justify-center"
@@ -157,34 +125,27 @@ function FormSection({ title, children }: { title: string; children: React.React
   )
 }
 
-function DocSection({ title, note, data, onChange, showAmount = false, showInstitution = false }: {
-  title: string; note?: string
-  data: { status: StatusType; date?: string; amount?: number; institution?: string }
-  onChange: (d: any) => void; showAmount?: boolean; showInstitution?: boolean
+function DocSection({ title, data, onChange }: {
+  title: string
+  data: { status: StatusType; date?: string }
+  onChange: (d: any) => void
 }) {
   return (
     <div className="bg-[#0d0d0d] border border-white/[0.07] rounded-2xl p-5 space-y-4">
-      <div className="flex items-baseline justify-between">
-        <p className="text-[9px] tracking-[0.35em] text-red-500/80 uppercase">{title}</p>
-        {note && <p className="text-[8px] text-neutral-600">{note}</p>}
-      </div>
-      <div className="grid grid-cols-2 gap-4">
-        <FormField label="BİTİŞ TARİHİ" type="date" value={data.date || ""} onChange={v => onChange({ ...data, date: v })} />
-        {showAmount && <FormField label="TUTAR (₺)" type="text" inputMode="decimal" value={data.amount?.toString().replace(".", ",") || ""} onChange={v => onChange({ ...data, amount: v ? parseFloat(v.replace(",", ".")) : undefined })} placeholder="5000" />}
-      </div>
-      {showInstitution && <FormField label="KURUM" value={data.institution || ""} onChange={v => onChange({ ...data, institution: v })} placeholder="Mapfre Sigorta" />}
+      <p className="text-[9px] tracking-[0.35em] text-red-500/80 uppercase">{title}</p>
+      <FormField label="BİTİŞ TARİHİ" type="date" value={data.date || ""} onChange={v => onChange({ ...data, date: v })} />
       <p className="text-[8px] text-neutral-700">45 gün kala sarı, geçince kırmızı</p>
     </div>
   )
 }
 
-function FormField({ label, value, onChange, type = "text", inputMode, placeholder }: {
-  label: string; value: string; onChange: (v: string) => void; type?: string; inputMode?: string; placeholder?: string
+function FormField({ label, value, onChange, type = "text", placeholder }: {
+  label: string; value: string; onChange: (v: string) => void; type?: string; placeholder?: string
 }) {
   return (
     <div>
       <label className="block text-[8px] tracking-[0.3em] text-neutral-600 mb-1.5 uppercase">{label}</label>
-      <input type={type} inputMode={inputMode as any} value={value} onChange={e => onChange(e.target.value)} placeholder={placeholder}
+      <input type={type} value={value} onChange={e => onChange(e.target.value)} placeholder={placeholder}
         className="w-full bg-black/40 border border-white/[0.08] rounded-xl text-sm text-white px-3.5 py-2.5 focus:outline-none focus:border-red-500/50 transition-colors placeholder:text-neutral-800" />
     </div>
   )

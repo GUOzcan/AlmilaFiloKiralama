@@ -6,8 +6,6 @@ export type StatusType = "valid" | "warning" | "expired"
 export interface DocField {
   status: StatusType
   date?: string
-  amount?: number
-  institution?: string
 }
 
 export interface Vehicle {
@@ -27,8 +25,6 @@ export interface Vehicle {
   mileage?: number
   sigorta: DocField
   kasko: DocField
-  mtv1: DocField  // 1. taksit - Ocak (31 Ocak son ödeme)
-  mtv2: DocField  // 2. taksit - Temmuz (31 Temmuz son ödeme)
   muayene: { status: StatusType; date?: string }
 }
 
@@ -38,7 +34,7 @@ export interface Alert {
   vehicleCategory: "Yönetim" | "Ticari"
   vehicleName: string
   licensePlate: string
-  type: "Sigorta" | "Kasko" | "MTV 1" | "MTV 2" | "Muayene"
+  type: "Sigorta" | "Kasko" | "Muayene"
   date: string
   status: StatusType
 }
@@ -61,8 +57,6 @@ function rowToVehicle(row: any): Vehicle {
     registrationOwner: row.registration_owner,
     sigorta: { status: row.sigorta_status as StatusType, date: row.sigorta_date, amount: row.sigorta_amount, institution: row.sigorta_institution },
     kasko: { status: row.kasko_status as StatusType, date: row.kasko_date, amount: row.kasko_amount, institution: row.kasko_institution },
-    mtv1: { status: (row.mtv1_status || 'valid') as StatusType, date: row.mtv1_date, amount: row.mtv1_amount },
-    mtv2: { status: (row.mtv2_status || 'valid') as StatusType, date: row.mtv2_date, amount: row.mtv2_amount },
     muayene: { status: row.muayene_status as StatusType, date: row.muayene_date },
   }
   return autoCalculateStatuses(raw) as Vehicle
@@ -86,12 +80,8 @@ function vehicleToRow(v: Omit<Vehicle, 'id'>) {
     registration_owner: c.registrationOwner || null,
     sigorta_status: c.sigorta.status,
     sigorta_date: c.sigorta.date || null,
-    sigorta_amount: c.sigorta.amount ?? null,
-    sigorta_institution: c.sigorta.institution || null,
     kasko_status: c.kasko.status,
     kasko_date: c.kasko.date || null,
-    kasko_amount: c.kasko.amount ?? null,
-    kasko_institution: c.kasko.institution || null,
     mtv_status: c.mtv1.status,   // eski kolon uyumu
     mtv_date: c.mtv1.date || null,
     mtv_amount: c.mtv1.amount ?? null,
@@ -139,8 +129,6 @@ export function generateAlerts(vehicleList: Vehicle[]): Alert[] {
       }
       check("Sigorta", vehicle.sigorta)
       check("Kasko", vehicle.kasko)
-      check("MTV 1", vehicle.mtv1)
-      check("MTV 2", vehicle.mtv2)
       check("Muayene", vehicle.muayene)
       return alerts
     })

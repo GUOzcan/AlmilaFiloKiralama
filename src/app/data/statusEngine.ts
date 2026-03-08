@@ -57,8 +57,6 @@ export function autoCalculateStatuses(vehicle: any): any {
     ...vehicle,
     sigorta: { ...vehicle.sigorta, status: calcStatus(vehicle.sigorta?.date) },
     kasko:   { ...vehicle.kasko,   status: calcStatus(vehicle.kasko?.date) },
-    mtv1:    { ...vehicle.mtv1,    status: calcStatus(vehicle.mtv1?.date) },
-    mtv2:    { ...vehicle.mtv2,    status: calcStatus(vehicle.mtv2?.date) },
     muayene: { ...vehicle.muayene, status: calcStatus(vehicle.muayene?.date) },
   }
 }

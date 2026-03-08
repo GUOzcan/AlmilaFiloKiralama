@@ -49,24 +49,22 @@ export function VehicleDetail() {
     </div>
   )
 
-  const allStatuses = [vehicle.sigorta.status, vehicle.kasko.status, vehicle.mtv1.status, vehicle.mtv2.status, vehicle.muayene.status]
+  const allStatuses = [vehicle.sigorta.status, vehicle.kasko.status, vehicle.muayene.status]
   const overallStatus = allStatuses.includes("expired") ? "expired" : allStatuses.includes("warning") ? "warning" : "valid"
   const overallConfig = getStatusConfig(overallStatus)
 
-  // Belge sırası: Sigorta → Kasko → Muayene → MTV1 → MTV2
   const docs = [
-    { title: "Sigorta",        status: vehicle.sigorta.status,  date: vehicle.sigorta.date,  amount: vehicle.sigorta.amount,  institution: vehicle.sigorta.institution },
-    { title: "Kasko",          status: vehicle.kasko.status,    date: vehicle.kasko.date,    amount: vehicle.kasko.amount,    institution: vehicle.kasko.institution },
-    { title: "Muayene",        status: vehicle.muayene.status,  date: vehicle.muayene.date },
-    { title: "MTV 1. Taksit",  status: vehicle.mtv1.status,     date: vehicle.mtv1.date,     amount: vehicle.mtv1.amount },
-    { title: "MTV 2. Taksit",  status: vehicle.mtv2.status,     date: vehicle.mtv2.date,     amount: vehicle.mtv2.amount },
+    { title: "Sigorta",  status: vehicle.sigorta.status,  date: vehicle.sigorta.date },
+    { title: "Kasko",    status: vehicle.kasko.status,    date: vehicle.kasko.date },
+    { title: "Muayene",  status: vehicle.muayene.status,  date: vehicle.muayene.date },
   ]
 
   return (
     <div className="min-h-screen bg-[#080808] text-white font-sans pb-24 relative overflow-hidden">
       <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[600px] h-[200px] bg-red-600/[0.04] blur-[80px] pointer-events-none" />
 
-      <div className="sticky top-0 z-20 bg-[#080808]/85 backdrop-blur-xl border-b border-white/[0.06] px-5 py-4 flex items-center justify-between">
+      <div className="sticky top-0 z-20 bg-[#080808]/85 backdrop-blur-xl border-b border-white/[0.06] px-5 py-4 flex items-center justify-between"
+        style={{ paddingTop: 'max(16px, env(safe-area-inset-top))' }}>
         <Link to={`/vehicles/${category}`} className="w-9 h-9 flex items-center justify-center rounded-full border border-white/[0.08] text-neutral-400 hover:text-white transition-all">
           <ArrowLeft className="w-4 h-4" />
         </Link>
@@ -82,7 +80,6 @@ export function VehicleDetail() {
       </div>
 
       <div className="max-w-lg mx-auto px-5 pt-8 pb-4 relative z-10">
-        {/* Hero */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
           className="relative bg-[#0d0d0d] border border-white/[0.07] rounded-2xl p-7 mb-5 overflow-hidden">
           <div className={`absolute top-0 right-0 w-40 h-40 rounded-full blur-3xl opacity-20 ${overallStatus === 'valid' ? 'bg-emerald-500' : overallStatus === 'warning' ? 'bg-amber-500' : 'bg-red-500'}`} />
@@ -95,24 +92,23 @@ export function VehicleDetail() {
           <div className="bg-white text-black px-4 py-1.5 text-lg font-bold tracking-[0.15em] rounded-sm shadow-[0_2px_20px_rgba(255,255,255,0.15)] inline-block">
             {vehicle.licensePlate}
           </div>
-          {/* Model yılı KALDIRILDI - sadece marka model */}
           <h1 className="text-2xl font-light tracking-wide text-white mt-3">
             {vehicle.brand && <span className="font-medium">{vehicle.brand} </span>}{vehicle.model}
           </h1>
         </motion.div>
 
-        {/* Stat chips — sıra: Model Yılı → Renk → Yakıt → Vites */}
+        {/* Stat chips: YIL → RENK → YAKIT → VİTES */}
         {(vehicle.modelYear || vehicle.color || vehicle.fuel || vehicle.transmission) && (
           <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }}
             className="grid grid-cols-4 gap-2 mb-5">
-            {vehicle.modelYear  && <StatChip label="YIL"   value={`${vehicle.modelYear}`} />}
-            {vehicle.color      && <StatChip label="RENK"  value={vehicle.color} />}
-            {vehicle.fuel       && <StatChip label="YAKIT" value={vehicle.fuel} />}
+            {vehicle.modelYear    && <StatChip label="YIL"   value={`${vehicle.modelYear}`} />}
+            {vehicle.color        && <StatChip label="RENK"  value={vehicle.color} />}
+            {vehicle.fuel         && <StatChip label="YAKIT" value={vehicle.fuel} />}
             {vehicle.transmission && <StatChip label="VİTES" value={vehicle.transmission} />}
           </motion.div>
         )}
 
-        {/* Araç Bilgileri — renk KALDIRILDI, beygir EKLENDİ */}
+        {/* Araç Bilgileri: sahip, motor, beygir, km */}
         {(vehicle.owner || vehicle.registrationOwner || vehicle.engine || vehicle.horsepower || vehicle.mileage) && (
           <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.15 }}
             className="bg-[#0d0d0d] border border-white/[0.07] rounded-2xl p-5 mb-4">
@@ -121,16 +117,16 @@ export function VehicleDetail() {
               <span className="text-[9px] tracking-[0.35em] text-neutral-500 uppercase">Araç Bilgileri</span>
             </div>
             <div className="space-y-0.5">
-              {vehicle.owner              && <InfoRow label="Araç Sahibi"   value={vehicle.owner} />}
-              {vehicle.registrationOwner  && <InfoRow label="Ruhsat Sahibi" value={vehicle.registrationOwner} />}
-              {vehicle.engine             && <InfoRow label="Motor"         value={vehicle.engine} />}
-              {vehicle.horsepower         && <InfoRow label="Beygir Gücü"   value={`${vehicle.horsepower} HP`} />}
-              {vehicle.mileage            && <InfoRow label="Kilometre"     value={`${vehicle.mileage.toLocaleString("tr-TR")} km`} />}
+              {vehicle.owner             && <InfoRow label="Araç Sahibi"   value={vehicle.owner} />}
+              {vehicle.registrationOwner && <InfoRow label="Ruhsat Sahibi" value={vehicle.registrationOwner} />}
+              {vehicle.engine            && <InfoRow label="Motor"         value={vehicle.engine} />}
+              {vehicle.horsepower        && <InfoRow label="Beygir Gücü"   value={`${vehicle.horsepower} HP`} />}
+              {vehicle.mileage           && <InfoRow label="Kilometre"     value={`${vehicle.mileage.toLocaleString("tr-TR")} km`} />}
             </div>
           </motion.div>
         )}
 
-        {/* Belgeler — sıra: Sigorta → Kasko → Muayene → MTV1 → MTV2 */}
+        {/* Belgeler: Sigorta → Kasko → Muayene */}
         <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }}
           className="bg-[#0d0d0d] border border-white/[0.07] rounded-2xl p-5">
           <div className="flex items-center gap-2 mb-4">
@@ -148,16 +144,11 @@ export function VehicleDetail() {
                       <span className="text-xs font-medium text-neutral-200">{doc.title}</span>
                       <span className={`text-[8px] tracking-[0.2em] px-2 py-0.5 rounded-full border ${cfg.badge}`}>{cfg.label}</span>
                     </div>
-                    <div className="flex items-center gap-3 flex-wrap">
-                      {doc.date && (
-                        <span className="text-[10px] text-neutral-600 flex items-center gap-1">
-                          <Calendar className="w-2.5 h-2.5" />
-                          {formatTR(doc.date)}
-                        </span>
-                      )}
-                      {doc.amount    && <span className="text-[10px] text-neutral-600">{doc.amount.toLocaleString("tr-TR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ₺</span>}
-                      {doc.institution && <span className="text-[10px] text-neutral-600">{doc.institution}</span>}
-                    </div>
+                    {doc.date && (
+                      <span className="text-[10px] text-neutral-600 flex items-center gap-1">
+                        <Calendar className="w-2.5 h-2.5" />{formatTR(doc.date)}
+                      </span>
+                    )}
                   </div>
                 </div>
               )

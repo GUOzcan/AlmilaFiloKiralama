@@ -41,7 +41,7 @@ export function VehicleList() {
     <div className="min-h-screen bg-[#080808] text-white font-sans pb-20" style={{overflowX:"hidden"}}>
       <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[700px] h-[200px] bg-red-600/[0.03] blur-[80px] pointer-events-none" />
 
-      <div className="sticky top-0 z-20 bg-[#080808] border-b border-white/[0.06] px-5 py-4 flex items-center justify-between">
+      <div className="fixed top-0 left-0 right-0 z-20 bg-[#080808] border-b border-white/[0.06] px-5 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Link to="/" className="w-9 h-9 flex items-center justify-center rounded-full border border-white/[0.08] text-neutral-400 hover:text-white transition-all">
             <ArrowLeft className="w-4 h-4" />
@@ -72,7 +72,7 @@ export function VehicleList() {
               const worst = getWorstStatus(vehicle)
               return (
                 <motion.div key={vehicle.id} variants={itemVariants}>
-                  <Link to={`/vehicles/${category}/${vehicle.id}`} className="group block bg-[#0d0d0d] border border-white/[0.06] hover:border-white/[0.12] transition-all duration-300 p-4 rounded-2xl relative overflow-hidden">
+                  <Link to={`/vehicles/${category}/${vehicle.id}`} className="group block bg-[#0d0d0d] border border-white/[0.06] hover:border-white/[0.12] transition-all duration-300 p-4 rounded-2xl relative" style={{overflowX:"hidden"}}>
                     <div className="flex items-center justify-between">
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-3 mb-2.5">

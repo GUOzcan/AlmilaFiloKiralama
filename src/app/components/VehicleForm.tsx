@@ -59,8 +59,8 @@ export function VehicleForm() {
   )
 
   return (
-    <div className="min-h-screen bg-[#080808] text-white font-sans pb-28 relative overflow-hidden">
-      <div className="sticky top-0 z-20 bg-[#080808]/85 backdrop-blur-xl border-b border-white/[0.06] px-5 py-4 flex items-center justify-between"
+    <div className="min-h-screen bg-[#080808] text-white font-sans pb-28 relative" style={{overflowX:"hidden"}}>
+      <div className="sticky top-0 z-20 bg-[#080808] border-b border-white/[0.06] px-5 py-4 flex items-center justify-between"
         style={{ paddingTop: 'max(16px, env(safe-area-inset-top))' }}>
         <Link to={isEdit ? `/vehicles/${category}/${id}` : `/vehicles/${category}`}
           className="w-9 h-9 flex items-center justify-center rounded-full border border-white/[0.08] text-neutral-400 hover:text-white transition-all">
@@ -102,8 +102,8 @@ export function VehicleForm() {
 
         <DocSection title="SİGORTA BİTİŞ TARİHİ" data={formData.sigorta!} onChange={d => setFormData({ ...formData, sigorta: d })} />
         <DocSection title="KASKO BİTİŞ TARİHİ"   data={formData.kasko!}   onChange={d => setFormData({ ...formData, kasko: d })} />
-        <DocSection title="MTV 1. TAKSİT BİTİŞ TARİHİ" data={formData.mtv1!} onChange={d => setFormData({ ...formData, mtv1: d })} />
-        <DocSection title="MTV 2. TAKSİT BİTİŞ TARİHİ" data={formData.mtv2!} onChange={d => setFormData({ ...formData, mtv2: d })} />
+        <DocSection title="MTV 1" data={formData.mtv1!} onChange={d => setFormData({ ...formData, mtv1: d })} />
+        <DocSection title="MTV 2" data={formData.mtv2!} onChange={d => setFormData({ ...formData, mtv2: d })} />
         <DocSection title="MUAYENE BİTİŞ TARİHİ" data={formData.muayene!} onChange={d => setFormData({ ...formData, muayene: d })} />
       </div>
 
@@ -138,7 +138,7 @@ function DocSection({ title, data, onChange }: {
     <div className="bg-[#0d0d0d] border border-white/[0.07] rounded-2xl p-5 space-y-4">
       <p className="text-[9px] tracking-[0.35em] text-red-500/80 uppercase">{title}</p>
       <FormField label="BİTİŞ TARİHİ" type="date" value={data.date || ""} onChange={v => onChange({ ...data, date: v })} />
-      <p className="text-[8px] text-neutral-700">45 gün kala sarı, geçince kırmızı</p>
+      <p className="text-[8px] text-neutral-700">30 gün kala sarı, geçince kırmızı</p>
     </div>
   )
 }

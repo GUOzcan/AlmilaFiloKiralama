@@ -22,10 +22,10 @@ export function ControlPanel() {
   const itemVariants = { hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0, transition: { duration: 0.45 } } }
 
   return (
-    <div className="min-h-screen bg-[#080808] text-white font-sans pb-24 relative overflow-hidden">
+    <div className="min-h-screen bg-[#080808] text-white font-sans pb-24 relative" style={{overflowX:"hidden"}}>
       <div className="fixed top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[250px] bg-red-600/[0.025] blur-[90px] pointer-events-none" />
 
-      <div className="sticky top-0 z-20 bg-[#080808]/85 backdrop-blur-xl border-b border-white/[0.06] px-5 py-4 flex items-center justify-between">
+      <div className="fixed top-0 left-0 right-0 z-20 bg-[#080808] border-b border-white/[0.06] px-5 py-4 flex items-center justify-between">
         <Link to="/" className="w-9 h-9 flex items-center justify-center rounded-full border border-white/[0.08] text-neutral-400 hover:text-white transition-all">
           <ArrowLeft className="w-4 h-4" />
         </Link>
@@ -54,13 +54,13 @@ export function ControlPanel() {
                 </div>
               </div>
             </div>
-            <div className="bg-[#0d0d0d] border border-red-500/20 rounded-2xl p-5 relative overflow-hidden">
+            <div className="bg-[#0d0d0d] border border-red-500/20 rounded-2xl p-5 relative" style={{overflowX:"hidden"}}>
               <div className="absolute top-0 right-0 w-20 h-20 bg-red-500/10 rounded-full blur-2xl" />
               <span className="block text-[8px] tracking-[0.3em] text-red-400/70 mb-2">KRİTİK</span>
               <span className="text-3xl font-light text-white block mb-1">{redAlerts}</span>
               <span className="text-[8px] tracking-[0.2em] text-red-500/60">SÜRESİ DOLMUŞ</span>
             </div>
-            <div className="bg-[#0d0d0d] border border-amber-500/20 rounded-2xl p-5 relative overflow-hidden">
+            <div className="bg-[#0d0d0d] border border-amber-500/20 rounded-2xl p-5 relative" style={{overflowX:"hidden"}}>
               <div className="absolute top-0 right-0 w-20 h-20 bg-amber-500/10 rounded-full blur-2xl" />
               <span className="block text-[8px] tracking-[0.3em] text-amber-400/70 mb-2">DİKKAT</span>
               <span className="text-3xl font-light text-white block mb-1">{yellowWarnings}</span>

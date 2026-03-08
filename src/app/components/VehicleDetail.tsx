@@ -155,7 +155,7 @@ export function VehicleDetail() {
                           {formatTR(doc.date)}
                         </span>
                       )}
-                      {doc.amount    && <span className="text-[10px] text-neutral-600">{doc.amount.toLocaleString("tr-TR")} ₺</span>}
+                      {doc.amount    && <span className="text-[10px] text-neutral-600">{doc.amount.toLocaleString("tr-TR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ₺</span>}
                       {doc.institution && <span className="text-[10px] text-neutral-600">{doc.institution}</span>}
                     </div>
                   </div>

@@ -170,7 +170,7 @@ function DocSection({ title, note, data, onChange, showAmount = false, showInsti
       </div>
       <div className="grid grid-cols-2 gap-4">
         <FormField label="BİTİŞ TARİHİ" type="date" value={data.date || ""} onChange={v => onChange({ ...data, date: v })} />
-        {showAmount && <FormField label="TUTAR (₺)" type="number" value={data.amount?.toString() || ""} onChange={v => onChange({ ...data, amount: v ? parseInt(v) : undefined })} placeholder="5000" />}
+        {showAmount && <FormField label="TUTAR (₺)" type="text" inputMode="decimal" value={data.amount?.toString().replace(".", ",") || ""} onChange={v => onChange({ ...data, amount: v ? parseFloat(v.replace(",", ".")) : undefined })} placeholder="5000" />}
       </div>
       {showInstitution && <FormField label="KURUM" value={data.institution || ""} onChange={v => onChange({ ...data, institution: v })} placeholder="Mapfre Sigorta" />}
       <p className="text-[8px] text-neutral-700">45 gün kala sarı, geçince kırmızı</p>
@@ -178,13 +178,13 @@ function DocSection({ title, note, data, onChange, showAmount = false, showInsti
   )
 }
 
-function FormField({ label, value, onChange, type = "text", placeholder }: {
-  label: string; value: string; onChange: (v: string) => void; type?: string; placeholder?: string
+function FormField({ label, value, onChange, type = "text", inputMode, placeholder }: {
+  label: string; value: string; onChange: (v: string) => void; type?: string; inputMode?: string; placeholder?: string
 }) {
   return (
     <div>
       <label className="block text-[8px] tracking-[0.3em] text-neutral-600 mb-1.5 uppercase">{label}</label>
-      <input type={type} value={value} onChange={e => onChange(e.target.value)} placeholder={placeholder}
+      <input type={type} inputMode={inputMode as any} value={value} onChange={e => onChange(e.target.value)} placeholder={placeholder}
         className="w-full bg-black/40 border border-white/[0.08] rounded-xl text-sm text-white px-3.5 py-2.5 focus:outline-none focus:border-red-500/50 transition-colors placeholder:text-neutral-800" />
     </div>
   )

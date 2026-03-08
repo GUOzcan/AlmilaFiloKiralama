@@ -1,0 +1,9 @@
+/* iPhone Dynamic Island (iPhone 14 Pro+, 15 Pro+, 16 Pro+, 17 Pro+) safe area fix */
+@supports (padding-top: env(safe-area-inset-top)) {
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}

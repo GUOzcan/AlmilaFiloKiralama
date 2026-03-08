@@ -18,6 +18,13 @@
     <meta property="og:title" content="Almila Filo Kiralama" />
     <meta property="og:description" content="Araç filo yönetim sistemi" />
     <meta property="og:image" content="/icon-512.png" />
+  <style>
+    /* Prevent content from going under Dynamic Island / notch */
+    #root {
+      padding-top: env(safe-area-inset-top);
+      padding-top: constant(safe-area-inset-top);
+    }
+  </style>
   </head>
   <body>
     <div id="root"></div>

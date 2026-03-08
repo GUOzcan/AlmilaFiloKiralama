@@ -79,7 +79,7 @@ export function VehicleList() {
                           <span className="inline-block bg-white text-black px-2.5 py-0.5 text-[10px] font-bold tracking-widest rounded-sm flex-shrink-0">{vehicle.licensePlate}</span>
                           <span className="text-sm font-light text-neutral-200 truncate">{vehicle.brand && `${vehicle.brand} `}{vehicle.model}</span>
                         </div>
-                        <div className="flex gap-3.5">
+                        <div className="flex gap-3.5 justify-center mt-1">
                           {[["SİGORTA", vehicle.sigorta.status], ["KASKO", vehicle.kasko.status], ["MUAYENE", vehicle.muayene.status]].map(([label, status]) => (
                             <div key={label} className="flex items-center gap-1.5">
                               <div className={`w-1.5 h-1.5 rounded-full ${getStatusColor(status as StatusType)}`} />

@@ -14,7 +14,6 @@ export function Home() {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'space-between',
-        paddingTop: 'env(safe-area-inset-top)',
         background: "radial-gradient(ellipse 100% 70% at 50% 0%, #2d0606 0%, #120202 45%, #080808 100%)"
       }}
     >

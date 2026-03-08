@@ -1,10 +1,11 @@
 /**
- * Türkiye araç belge kurallarına göre otomatik status hesaplama
- * 
- * Sigorta: yıllık - tarih bitiş tarihi
- * Kasko: yıllık - tarih bitiş tarihi  
- * MTV: yılda 2 taksit - 31 Ocak ve 31 Temmuz son ödeme
- * Muayene: Binek → 2 yılda bir, Ticari → yılda bir - tarih son muayene tarihi
+ * Türkiye araç belge kuralları - YAPILIŞ TARİHİ girilir, bitiş otomatik hesaplanır
+ *
+ * Sigorta   → yapılış tarihi + 1 YIL = bitiş
+ * Kasko     → yapılış tarihi + 1 YIL = bitiş
+ * MTV 1     → yapılış/ödeme tarihi + 6 AY (Ocak ödemesi Temmuz'a kadar geçerli)
+ * MTV 2     → yapılış/ödeme tarihi + 6 AY (Temmuz ödemesi Ocak'a kadar geçerli)
+ * Muayene   → yapılış tarihi + 2 YIL (binek) veya + 1 YIL (ticari)
  */
 
 import { StatusType } from './vehicleData'
@@ -18,12 +19,17 @@ function daysDiff(targetDate: Date): number {
   return Math.floor((targetDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
 }
 
-function parseDate(dateStr: string): Date | null {
+export function parseDate(dateStr: string): Date | null {
   if (!dateStr) return null
-  // Desteklenen formatlar: YYYY-MM-DD, DD.MM.YYYY
-  if (dateStr.includes('-')) return new Date(dateStr)
+  if (dateStr.includes('-')) {
+    const d = new Date(dateStr)
+    return isNaN(d.getTime()) ? null : d
+  }
   const parts = dateStr.split('.')
-  if (parts.length === 3) return new Date(`${parts[2]}-${parts[1]}-${parts[0]}`)
+  if (parts.length === 3) {
+    const d = new Date(`${parts[2]}-${parts[1].padStart(2,'0')}-${parts[0].padStart(2,'0')}`)
+    return isNaN(d.getTime()) ? null : d
+  }
   return null
 }
 
@@ -33,71 +39,97 @@ function daysToStatus(days: number): StatusType {
   return 'valid'
 }
 
-/** Sigorta / Kasko: bitiş tarihi girilir, 1 yıllık poliçe */
-export function calcSigortaStatus(endDateStr: string): StatusType {
-  const endDate = parseDate(endDateStr)
-  if (!endDate) return 'valid'
-  return daysToStatus(daysDiff(endDate))
+function addMonths(date: Date, months: number): Date {
+  const d = new Date(date)
+  d.setMonth(d.getMonth() + months)
+  return d
 }
 
-/** 
- * MTV: ödeme tarihi girilir (31 Ocak veya 31 Temmuz)
- * Girilen tarih son ödeme tarihidir — geçtiyse kırmızı, 30 gün kaldıysa sarı
- */
-export function calcMtvStatus(payDateStr: string): StatusType {
-  const payDate = parseDate(payDateStr)
-  if (!payDate) return 'valid'
-  return daysToStatus(daysDiff(payDate))
+function addYears(date: Date, years: number): Date {
+  const d = new Date(date)
+  d.setFullYear(d.getFullYear() + years)
+  return d
+}
+
+/** Sigorta: yapılış tarihi + 1 yıl */
+export function calcSigortaExpiry(startDateStr: string): Date | null {
+  const d = parseDate(startDateStr)
+  return d ? addYears(d, 1) : null
+}
+
+/** Kasko: yapılış tarihi + 1 yıl */
+export function calcKaskoExpiry(startDateStr: string): Date | null {
+  const d = parseDate(startDateStr)
+  return d ? addYears(d, 1) : null
+}
+
+/** MTV: ödeme tarihi + 6 ay (her taksit 6 aylık) */
+export function calcMtvExpiry(payDateStr: string): Date | null {
+  const d = parseDate(payDateStr)
+  return d ? addMonths(d, 6) : null
 }
 
 /**
- * Muayene: son muayene tarihi girilir
- * Binek (Yönetim) → 2 yıl sonra dolacak
- * Ticari → 1 yıl sonra dolacak
+ * Muayene: yapılış tarihi + periyot
+ * Binek (Yönetim) → + 2 yıl
+ * Ticari          → + 1 yıl
  */
-export function calcMuayeneStatus(lastInspectionDateStr: string, category: 'Yönetim' | 'Ticari'): StatusType {
-  const lastDate = parseDate(lastInspectionDateStr)
-  if (!lastDate) return 'valid'
-  
-  const periodYears = category === 'Ticari' ? 1 : 2
-  const expiryDate = new Date(lastDate)
-  expiryDate.setFullYear(expiryDate.getFullYear() + periodYears)
-  
-  return daysToStatus(daysDiff(expiryDate))
+export function calcMuayeneExpiry(inspectionDateStr: string, category: 'Yönetim' | 'Ticari'): Date | null {
+  const d = parseDate(inspectionDateStr)
+  if (!d) return null
+  return category === 'Ticari' ? addYears(d, 1) : addYears(d, 2)
 }
 
-/** 
- * Tüm statüsleri otomatik hesapla ve Supabase'e kaydet 
- * VehicleForm'da kaydetmeden önce çağrılır
+/** Bitiş tarihinden StatusType hesapla */
+function expiryToStatus(expiry: Date | null): StatusType {
+  if (!expiry) return 'valid'
+  return daysToStatus(daysDiff(expiry))
+}
+
+/** Format: YYYY-MM-DD */
+function formatDate(d: Date): string {
+  return d.toISOString().split('T')[0]
+}
+
+/**
+ * Tüm belgelerin statüsünü ve bitiş tarihlerini otomatik hesapla
+ * VehicleForm kaydetmeden önce ve loadVehicles'da çağrılır
  */
 export function autoCalculateStatuses(vehicle: any): any {
   const category = vehicle.category as 'Yönetim' | 'Ticari'
-  
+
+  const sigortaExpiry = vehicle.sigorta?.date ? calcSigortaExpiry(vehicle.sigorta.date) : null
+  const kaskoExpiry  = vehicle.kasko?.date  ? calcKaskoExpiry(vehicle.kasko.date)   : null
+  const mtv1Expiry   = vehicle.mtv1?.date   ? calcMtvExpiry(vehicle.mtv1.date)       : null
+  const mtv2Expiry   = vehicle.mtv2?.date   ? calcMtvExpiry(vehicle.mtv2.date)       : null
+  const muayeneExpiry = vehicle.muayene?.date ? calcMuayeneExpiry(vehicle.muayene.date, category) : null
+
   return {
     ...vehicle,
     sigorta: {
       ...vehicle.sigorta,
-      status: vehicle.sigorta?.date 
-        ? calcSigortaStatus(vehicle.sigorta.date) 
-        : vehicle.sigorta?.status || 'valid'
+      status: expiryToStatus(sigortaExpiry),
+      expiryDate: sigortaExpiry ? formatDate(sigortaExpiry) : undefined,
     },
     kasko: {
       ...vehicle.kasko,
-      status: vehicle.kasko?.date 
-        ? calcSigortaStatus(vehicle.kasko.date) 
-        : vehicle.kasko?.status || 'valid'
+      status: expiryToStatus(kaskoExpiry),
+      expiryDate: kaskoExpiry ? formatDate(kaskoExpiry) : undefined,
     },
-    mtv: {
-      ...vehicle.mtv,
-      status: vehicle.mtv?.date 
-        ? calcMtvStatus(vehicle.mtv.date) 
-        : vehicle.mtv?.status || 'valid'
+    mtv1: {
+      ...vehicle.mtv1,
+      status: expiryToStatus(mtv1Expiry),
+      expiryDate: mtv1Expiry ? formatDate(mtv1Expiry) : undefined,
+    },
+    mtv2: {
+      ...vehicle.mtv2,
+      status: expiryToStatus(mtv2Expiry),
+      expiryDate: mtv2Expiry ? formatDate(mtv2Expiry) : undefined,
     },
     muayene: {
       ...vehicle.muayene,
-      status: vehicle.muayene?.date 
-        ? calcMuayeneStatus(vehicle.muayene.date, category) 
-        : vehicle.muayene?.status || 'valid'
-    }
+      status: expiryToStatus(muayeneExpiry),
+      expiryDate: muayeneExpiry ? formatDate(muayeneExpiry) : undefined,
+    },
   }
 }

@@ -4,19 +4,18 @@ import { loadVehicles, addVehicle, updateVehicle, Vehicle, StatusType } from "..
 import { ArrowLeft, Check } from "lucide-react"
 import { motion } from "motion/react"
 
+const emptyDoc = { status: "valid" as StatusType }
+
 export function VehicleForm() {
   const { category, id } = useParams<{ category: string; id: string }>()
   const navigate = useNavigate()
   const isEdit = !!id && id !== "add"
   const categoryKey = (category === "yonetim" ? "Yönetim" : "Ticari") as "Yönetim" | "Ticari"
 
-  const emptyForm: Partial<Vehicle> = {
+  const [formData, setFormData] = useState<Partial<Vehicle>>({
     category: categoryKey, licensePlate: "", model: "",
-    sigorta: { status: "valid" }, kasko: { status: "valid" },
-    mtv: { status: "valid" }, muayene: { status: "valid" },
-  }
-
-  const [formData, setFormData] = useState<Partial<Vehicle>>(emptyForm)
+    sigorta: emptyDoc, kasko: emptyDoc, mtv1: emptyDoc, mtv2: emptyDoc, muayene: emptyDoc,
+  })
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const [loading, setLoading] = useState(isEdit)
@@ -36,10 +35,11 @@ export function VehicleForm() {
     setSaving(true)
     const vehicleData = {
       ...formData, category: categoryKey,
-      sigorta: formData.sigorta || { status: "valid" as StatusType },
-      kasko: formData.kasko || { status: "valid" as StatusType },
-      mtv: formData.mtv || { status: "valid" as StatusType },
-      muayene: formData.muayene || { status: "valid" as StatusType },
+      sigorta: formData.sigorta || emptyDoc,
+      kasko: formData.kasko || emptyDoc,
+      mtv1: formData.mtv1 || emptyDoc,
+      mtv2: formData.mtv2 || emptyDoc,
+      muayene: formData.muayene || emptyDoc,
     } as Omit<Vehicle, "id">
 
     if (isEdit && formData.id) {
@@ -99,13 +99,44 @@ export function VehicleForm() {
           <FormField label="RUHSAT SAHİBİ" value={formData.registrationOwner || ""} onChange={v => setFormData({ ...formData, registrationOwner: v })} placeholder="Almila Grup A.Ş." />
         </FormSection>
 
-        <DocSection title="SİGORTA" note="Poliçe bitiş tarihi" data={formData.sigorta!} onChange={d => setFormData({ ...formData, sigorta: d })} showAmount showInstitution />
-        <DocSection title="KASKO" note="Poliçe bitiş tarihi" data={formData.kasko!} onChange={d => setFormData({ ...formData, kasko: d })} showAmount showInstitution />
-        <DocSection title="MTV" note="Son ödeme tarihi (31 Ocak veya 31 Temmuz)" data={formData.mtv!} onChange={d => setFormData({ ...formData, mtv: d })} showAmount />
-        <DocSection title="MUAYENE" note="Son muayene tarihi (binek=2yıl, ticari=1yıl)" data={formData.muayene!} onChange={d => setFormData({ ...formData, muayene: d })} />
+        <DocSection
+          title="SİGORTA"
+          note="Poliçe bitiş tarihini gir"
+          data={formData.sigorta!}
+          onChange={d => setFormData({ ...formData, sigorta: d })}
+          showAmount showInstitution
+        />
+        <DocSection
+          title="KASKO"
+          note="Poliçe bitiş tarihini gir"
+          data={formData.kasko!}
+          onChange={d => setFormData({ ...formData, kasko: d })}
+          showAmount showInstitution
+        />
+        <DocSection
+          title="MTV 1. TAKSİT"
+          note="Son ödeme: 31 Ocak"
+          data={formData.mtv1!}
+          onChange={d => setFormData({ ...formData, mtv1: d })}
+          showAmount
+        />
+        <DocSection
+          title="MTV 2. TAKSİT"
+          note="Son ödeme: 31 Temmuz"
+          data={formData.mtv2!}
+          onChange={d => setFormData({ ...formData, mtv2: d })}
+          showAmount
+        />
+        <DocSection
+          title="MUAYENE"
+          note={`Son muayene tarihini gir (${categoryKey === 'Ticari' ? 'ticari=1 yıl' : 'binek=2 yıl'})`}
+          data={formData.muayene!}
+          onChange={d => setFormData({ ...formData, muayene: d })}
+        />
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 z-20 p-5 bg-gradient-to-t from-[#080808] via-[#080808]/90 to-transparent pointer-events-none flex justify-center">
+      <div className="fixed bottom-0 left-0 right-0 z-20 p-5 bg-gradient-to-t from-[#080808] via-[#080808]/90 to-transparent pointer-events-none flex justify-center"
+        style={{ paddingBottom: 'max(20px, env(safe-area-inset-bottom))' }}>
         <motion.button onClick={handleSubmit} whileTap={{ scale: 0.97 }}
           className={`pointer-events-auto w-full max-w-sm py-4 rounded-2xl flex items-center justify-center gap-2.5 text-[11px] font-medium tracking-[0.3em] uppercase transition-all ${
             saved ? "bg-emerald-500 text-white" : saving ? "bg-red-800 text-white" : "bg-red-600 hover:bg-red-500 text-white shadow-[0_4px_30px_rgba(220,38,38,0.25)]"
@@ -126,24 +157,23 @@ function FormSection({ title, children }: { title: string; children: React.React
   )
 }
 
-function DocSection({ title, data, onChange, showAmount = false, showInstitution = false, note }: {
-  title: string; data: { status: StatusType; date?: string; amount?: number; institution?: string }
-  onChange: (d: any) => void; showAmount?: boolean; showInstitution?: boolean; note?: string
+function DocSection({ title, note, data, onChange, showAmount = false, showInstitution = false }: {
+  title: string; note?: string
+  data: { status: StatusType; date?: string; amount?: number; institution?: string }
+  onChange: (d: any) => void; showAmount?: boolean; showInstitution?: boolean
 }) {
   return (
     <div className="bg-[#0d0d0d] border border-white/[0.07] rounded-2xl p-5 space-y-4">
       <div className="flex items-baseline justify-between">
         <p className="text-[9px] tracking-[0.35em] text-red-500/80 uppercase">{title}</p>
-        {note && <p className="text-[8px] text-neutral-700">{note}</p>}
+        {note && <p className="text-[8px] text-neutral-600">{note}</p>}
       </div>
-      <p className="text-[8px] text-amber-600/70 tracking-wide">📅 Tarih girilince durum otomatik hesaplanır</p>
-      <FormSelect label="DURUM" value={data.status} onChange={v => onChange({ ...data, status: v as StatusType })}
-        options={["valid", "warning", "expired"]} labels={["GEÇERLİ", "YAKLAŞIYOR", "SÜRESİ DOLMUŞ"]} />
       <div className="grid grid-cols-2 gap-4">
-        <FormField label="TARİH" type="date" value={data.date || ""} onChange={v => onChange({ ...data, date: v })} />
+        <FormField label="YAPILIŞ / ÖDEME TARİHİ" type="date" value={data.date || ""} onChange={v => onChange({ ...data, date: v })} />
         {showAmount && <FormField label="TUTAR (₺)" type="number" value={data.amount?.toString() || ""} onChange={v => onChange({ ...data, amount: v ? parseInt(v) : undefined })} placeholder="5000" />}
       </div>
       {showInstitution && <FormField label="KURUM" value={data.institution || ""} onChange={v => onChange({ ...data, institution: v })} placeholder="Mapfre Sigorta" />}
+      <p className="text-[8px] text-neutral-700">Tarih girilince durum otomatik hesaplanır</p>
     </div>
   )
 }

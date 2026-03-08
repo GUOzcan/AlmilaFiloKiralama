@@ -3,6 +3,13 @@ import { autoCalculateStatuses } from './statusEngine'
 
 export type StatusType = "valid" | "warning" | "expired"
 
+export interface DocField {
+  status: StatusType
+  date?: string
+  amount?: number
+  institution?: string
+}
+
 export interface Vehicle {
   id: string
   category: "Yönetim" | "Ticari"
@@ -18,9 +25,10 @@ export interface Vehicle {
   transmission?: string
   color?: string
   mileage?: number
-  sigorta: { status: StatusType; date?: string; amount?: number; institution?: string }
-  kasko: { status: StatusType; date?: string; amount?: number; institution?: string }
-  mtv: { status: StatusType; date?: string; amount?: number }
+  sigorta: DocField
+  kasko: DocField
+  mtv1: DocField  // 1. taksit - Ocak (31 Ocak son ödeme)
+  mtv2: DocField  // 2. taksit - Temmuz (31 Temmuz son ödeme)
   muayene: { status: StatusType; date?: string }
 }
 
@@ -29,7 +37,7 @@ export interface Alert {
   vehicleId: string
   vehicleName: string
   licensePlate: string
-  type: "Sigorta" | "Kasko" | "MTV" | "Muayene"
+  type: "Sigorta" | "Kasko" | "MTV 1" | "MTV 2" | "Muayene"
   date: string
   status: StatusType
 }
@@ -52,43 +60,48 @@ function rowToVehicle(row: any): Vehicle {
     registrationOwner: row.registration_owner,
     sigorta: { status: row.sigorta_status as StatusType, date: row.sigorta_date, amount: row.sigorta_amount, institution: row.sigorta_institution },
     kasko: { status: row.kasko_status as StatusType, date: row.kasko_date, amount: row.kasko_amount, institution: row.kasko_institution },
-    mtv: { status: row.mtv_status as StatusType, date: row.mtv_date, amount: row.mtv_amount },
+    mtv1: { status: (row.mtv1_status || 'valid') as StatusType, date: row.mtv1_date, amount: row.mtv1_amount },
+    mtv2: { status: (row.mtv2_status || 'valid') as StatusType, date: row.mtv2_date, amount: row.mtv2_amount },
     muayene: { status: row.muayene_status as StatusType, date: row.muayene_date },
   }
-  // Tarihlere göre statüsü yeniden hesapla (gerçek zamanlı)
   return autoCalculateStatuses(raw) as Vehicle
 }
 
 function vehicleToRow(v: Omit<Vehicle, 'id'>) {
-  // Kaydetmeden önce statüsleri hesapla
-  const calculated = autoCalculateStatuses(v)
+  const c = autoCalculateStatuses(v)
   return {
-    category: calculated.category,
-    license_plate: calculated.licensePlate,
-    brand: calculated.brand || null,
-    model: calculated.model,
-    model_year: calculated.modelYear || null,
-    engine: calculated.engine || null,
-    horsepower: calculated.horsepower || null,
-    fuel: calculated.fuel || null,
-    transmission: calculated.transmission || null,
-    color: calculated.color || null,
-    mileage: calculated.mileage || null,
-    owner: calculated.owner || null,
-    registration_owner: calculated.registrationOwner || null,
-    sigorta_status: calculated.sigorta.status,
-    sigorta_date: calculated.sigorta.date || null,
-    sigorta_amount: calculated.sigorta.amount || null,
-    sigorta_institution: calculated.sigorta.institution || null,
-    kasko_status: calculated.kasko.status,
-    kasko_date: calculated.kasko.date || null,
-    kasko_amount: calculated.kasko.amount || null,
-    kasko_institution: calculated.kasko.institution || null,
-    mtv_status: calculated.mtv.status,
-    mtv_date: calculated.mtv.date || null,
-    mtv_amount: calculated.mtv.amount || null,
-    muayene_status: calculated.muayene.status,
-    muayene_date: calculated.muayene.date || null,
+    category: c.category,
+    license_plate: c.licensePlate,
+    brand: c.brand || null,
+    model: c.model,
+    model_year: c.modelYear || null,
+    engine: c.engine || null,
+    horsepower: c.horsepower || null,
+    fuel: c.fuel || null,
+    transmission: c.transmission || null,
+    color: c.color || null,
+    mileage: c.mileage || null,
+    owner: c.owner || null,
+    registration_owner: c.registrationOwner || null,
+    sigorta_status: c.sigorta.status,
+    sigorta_date: c.sigorta.date || null,
+    sigorta_amount: c.sigorta.amount || null,
+    sigorta_institution: c.sigorta.institution || null,
+    kasko_status: c.kasko.status,
+    kasko_date: c.kasko.date || null,
+    kasko_amount: c.kasko.amount || null,
+    kasko_institution: c.kasko.institution || null,
+    mtv_status: c.mtv1.status,   // eski kolon uyumu
+    mtv_date: c.mtv1.date || null,
+    mtv_amount: c.mtv1.amount || null,
+    mtv1_status: c.mtv1.status,
+    mtv1_date: c.mtv1.date || null,
+    mtv1_amount: c.mtv1.amount || null,
+    mtv2_status: c.mtv2.status,
+    mtv2_date: c.mtv2.date || null,
+    mtv2_amount: c.mtv2.amount || null,
+    muayene_status: c.muayene.status,
+    muayene_date: c.muayene.date || null,
   }
 }
 
@@ -118,20 +131,15 @@ export function generateAlerts(vehicleList: Vehicle[]): Alert[] {
   return vehicleList
     .flatMap((vehicle) => {
       const alerts: Alert[] = []
-      const check = (type: "Sigorta" | "Kasko" | "MTV" | "Muayene", doc: { status: StatusType; date?: string }) => {
+      const check = (type: Alert['type'], doc: { status: StatusType; date?: string }) => {
         if ((doc.status === "expired" || doc.status === "warning") && doc.date) {
-          alerts.push({
-            id: `${vehicle.id}-${type}`,
-            vehicleId: vehicle.id,
-            vehicleName: `${vehicle.brand || ""} ${vehicle.model}`.trim(),
-            licensePlate: vehicle.licensePlate,
-            type, date: doc.date, status: doc.status
-          })
+          alerts.push({ id: `${vehicle.id}-${type}`, vehicleId: vehicle.id, vehicleName: `${vehicle.brand || ""} ${vehicle.model}`.trim(), licensePlate: vehicle.licensePlate, type, date: doc.date, status: doc.status })
         }
       }
       check("Sigorta", vehicle.sigorta)
       check("Kasko", vehicle.kasko)
-      check("MTV", vehicle.mtv)
+      check("MTV 1", vehicle.mtv1)
+      check("MTV 2", vehicle.mtv2)
       check("Muayene", vehicle.muayene)
       return alerts
     })

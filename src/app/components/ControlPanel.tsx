@@ -81,7 +81,7 @@ export function ControlPanel() {
             ) : (
               <div className="space-y-2.5">
                 {alerts.map(alert => (
-                  <Link key={alert.id} to={`/vehicles/${alert.vehicleId}`}
+                  <Link key={alert.id} to={`/vehicles/${alert.vehicleCategory === "Yönetim" ? "yonetim" : "ticari"}/${alert.vehicleId}`}
                     className="block bg-[#0d0d0d] border border-white/[0.06] hover:border-white/[0.12] rounded-2xl p-4 relative overflow-hidden transition-all">
                     <div className={`absolute left-0 top-0 w-0.5 h-full rounded-l-2xl ${alert.status === "expired" ? "bg-red-500" : "bg-amber-500"}`} />
                     <div className="flex items-center justify-between mb-2">

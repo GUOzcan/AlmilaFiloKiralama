@@ -35,6 +35,7 @@ export interface Vehicle {
 export interface Alert {
   id: string
   vehicleId: string
+  vehicleCategory: "Yönetim" | "Ticari"
   vehicleName: string
   licensePlate: string
   type: "Sigorta" | "Kasko" | "MTV 1" | "MTV 2" | "Muayene"

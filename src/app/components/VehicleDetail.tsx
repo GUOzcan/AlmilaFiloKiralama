@@ -81,7 +81,7 @@ export function VehicleDetail() {
         </div>
       </div>
 
-      <div className="max-w-lg mx-auto px-5 pt-8 pb-4 relative z-10">
+      <div className="max-w-lg mx-auto px-5 pb-4 relative z-10" style={{paddingTop:"80px"}}>
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
           className="relative bg-[#0d0d0d] border border-white/[0.07] rounded-2xl p-7 mb-5 overflow-hidden">
           <div className={`absolute top-0 right-0 w-40 h-40 rounded-full blur-3xl opacity-20 ${overallStatus === 'valid' ? 'bg-emerald-500' : overallStatus === 'warning' ? 'bg-amber-500' : 'bg-red-500'}`} />

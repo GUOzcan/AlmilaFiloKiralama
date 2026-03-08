@@ -53,7 +53,7 @@ export function VehicleList() {
         </Link>
       </div>
 
-      <div className="max-w-lg mx-auto px-5 py-6 relative z-10">
+      <div className="max-w-lg mx-auto px-5 py-6 relative z-10" style={{paddingTop:"80px"}}>
         {loading ? (
           <div className="flex justify-center py-24">
             <div className="w-5 h-5 border border-red-500/40 border-t-red-500 rounded-full animate-spin" />

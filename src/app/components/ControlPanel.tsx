@@ -38,7 +38,7 @@ export function ControlPanel() {
           <div className="w-5 h-5 border border-red-500/40 border-t-red-500 rounded-full animate-spin" />
         </div>
       ) : (
-        <motion.div variants={containerVariants} initial="hidden" animate="show" className="max-w-lg mx-auto px-5 py-6 relative z-10">
+        <motion.div variants={containerVariants} initial="hidden" animate="show" className="max-w-lg mx-auto px-5 py-6 relative z-10" style={{paddingTop:"80px"}}>
           <motion.div variants={itemVariants} className="grid grid-cols-2 gap-3 mb-6">
             <div className="col-span-2 bg-[#0d0d0d] border border-white/[0.07] rounded-2xl p-5 flex items-center justify-between">
               <div>

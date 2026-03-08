@@ -11,10 +11,15 @@
   display: none;
 }
 
-/* Body overflow kilitle - sağa sola kaymayı önle */
-html, body {
+/* Body overflow kilitle */
+html, body, #root {
   overflow-x: hidden;
   max-width: 100vw;
   overscroll-behavior: none;
 }
-@import './safearea.css';
+
+/* Date input taşmasını önle */
+input[type="date"] {
+  max-width: 100%;
+  box-sizing: border-box;
+}

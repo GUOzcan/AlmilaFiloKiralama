@@ -41,7 +41,6 @@ export function VehicleForm() {
       mtv2: formData.mtv2 || emptyDoc,
       muayene: formData.muayene || emptyDoc,
     } as Omit<Vehicle, "id">
-
     if (isEdit && formData.id) {
       await updateVehicle({ ...vehicleData, id: formData.id })
     } else {
@@ -59,21 +58,25 @@ export function VehicleForm() {
   )
 
   return (
-    <div className="min-h-screen bg-[#080808] text-white font-sans pb-28 relative" style={{overflowX:"hidden"}}>
-      <div className="sticky top-0 z-20 bg-[#080808] border-b border-white/[0.06] px-5 py-4 flex items-center justify-between"
-        style={{ paddingTop: 'max(16px, env(safe-area-inset-top))' }}>
+    <div className="min-h-screen bg-[#080808] text-white font-sans" style={{overflowX:'hidden'}}>
+      {/* FIXED HEADER */}
+      <div className="fixed top-0 left-0 right-0 z-50 bg-[#080808] border-b border-white/[0.06] px-5 flex items-center justify-between"
+        style={{ paddingTop: 'max(16px, env(safe-area-inset-top))', paddingBottom: '16px' }}>
         <Link to={isEdit ? `/vehicles/${category}/${id}` : `/vehicles/${category}`}
           className="w-9 h-9 flex items-center justify-center rounded-full border border-white/[0.08] text-neutral-400 hover:text-white transition-all">
           <ArrowLeft className="w-4 h-4" />
         </Link>
         <span className="text-[10px] tracking-[0.35em] text-neutral-500 uppercase">{isEdit ? "DÜZENLE" : "YENİ ARAÇ"}</span>
         <button onClick={handleSubmit}
-          className={`w-9 h-9 flex items-center justify-center rounded-full transition-all ${saved ? "bg-emerald-500 border-emerald-500" : "border border-red-500/40 text-red-400 hover:bg-red-500 hover:text-white"}`}>
+          className={`w-9 h-9 flex items-center justify-center rounded-full transition-all ${saved ? "bg-emerald-500" : "border border-red-500/40 text-red-400 hover:bg-red-500 hover:text-white"}`}>
           <Check className="w-4 h-4" />
         </button>
       </div>
 
-      <div className="max-w-lg mx-auto px-5 py-6 space-y-5">
+      {/* SCROLLABLE CONTENT - padded top for fixed header */}
+      <div className="max-w-lg mx-auto px-5 space-y-5 pb-32"
+        style={{ paddingTop: 'calc(max(16px, env(safe-area-inset-top)) + 56px)' }}>
+
         <FormSection title="ARAÇ BİLGİLERİ">
           <FormField label="PLAKA *" value={formData.licensePlate || ""} onChange={v => setFormData({ ...formData, licensePlate: v.toUpperCase() })} placeholder="06 ABC 123" />
           <div className="grid grid-cols-2 gap-4">
@@ -102,18 +105,19 @@ export function VehicleForm() {
 
         <DocSection title="SİGORTA BİTİŞ TARİHİ" data={formData.sigorta!} onChange={d => setFormData({ ...formData, sigorta: d })} />
         <DocSection title="KASKO BİTİŞ TARİHİ"   data={formData.kasko!}   onChange={d => setFormData({ ...formData, kasko: d })} />
-        <DocSection title="MTV 1" data={formData.mtv1!} onChange={d => setFormData({ ...formData, mtv1: d })} />
-        <DocSection title="MTV 2" data={formData.mtv2!} onChange={d => setFormData({ ...formData, mtv2: d })} />
-        <DocSection title="MUAYENE BİTİŞ TARİHİ" data={formData.muayene!} onChange={d => setFormData({ ...formData, muayene: d })} />
+        <DocSection title="MTV 1"                  data={formData.mtv1!}    onChange={d => setFormData({ ...formData, mtv1: d })} />
+        <DocSection title="MTV 2"                  data={formData.mtv2!}    onChange={d => setFormData({ ...formData, mtv2: d })} />
+        <DocSection title="MUAYENE BİTİŞ TARİHİ"  data={formData.muayene!} onChange={d => setFormData({ ...formData, muayene: d })} />
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 z-20 p-5 bg-gradient-to-t from-[#080808] via-[#080808]/90 to-transparent pointer-events-none flex justify-center"
+      {/* FIXED BOTTOM BUTTON */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 px-5 bg-gradient-to-t from-[#080808] via-[#080808]/95 to-transparent pt-6"
         style={{ paddingBottom: 'max(20px, env(safe-area-inset-bottom))' }}>
         <motion.button onClick={handleSubmit} whileTap={{ scale: 0.97 }}
-          className={`pointer-events-auto w-full max-w-sm py-4 rounded-2xl flex items-center justify-center gap-2.5 text-[11px] font-medium tracking-[0.3em] uppercase transition-all ${
-            saved ? "bg-emerald-500 text-white" : saving ? "bg-red-800 text-white" : "bg-red-600 hover:bg-red-500 text-white shadow-[0_4px_30px_rgba(220,38,38,0.25)]"
+          className={`w-full max-w-sm mx-auto block py-4 rounded-2xl text-[11px] font-medium tracking-[0.3em] uppercase transition-all ${
+            saved ? "bg-emerald-500 text-white" : saving ? "bg-red-800 text-white" : "bg-red-600 hover:bg-red-500 text-white"
           }`}>
-          {saved ? <><Check className="w-4 h-4" /> KAYDEDİLDİ</> : saving ? "KAYDEDİLİYOR..." : isEdit ? "GÜNCELLE" : "KAYDET"}
+          {saved ? "KAYDEDİLDİ ✓" : saving ? "KAYDEDİLİYOR..." : isEdit ? "GÜNCELLE" : "KAYDET"}
         </motion.button>
       </div>
     </div>
@@ -135,9 +139,18 @@ function DocSection({ title, data, onChange }: {
   onChange: (d: any) => void
 }) {
   return (
-    <div className="bg-[#0d0d0d] border border-white/[0.07] rounded-2xl p-5 space-y-4">
+    <div className="bg-[#0d0d0d] border border-white/[0.07] rounded-2xl p-5 space-y-3">
       <p className="text-[9px] tracking-[0.35em] text-red-500/80 uppercase">{title}</p>
-      <FormField label="BİTİŞ TARİHİ" type="date" value={data.date || ""} onChange={v => onChange({ ...data, date: v })} />
+      <div>
+        <label className="block text-[8px] tracking-[0.3em] text-neutral-600 mb-1.5 uppercase">BİTİŞ TARİHİ</label>
+        <input
+          type="date"
+          value={data.date || ""}
+          onChange={e => onChange({ ...data, date: e.target.value })}
+          className="w-full bg-black/40 border border-white/[0.08] rounded-xl text-sm text-white px-3.5 py-2.5 focus:outline-none focus:border-red-500/50 transition-colors"
+          style={{ maxWidth: '100%', boxSizing: 'border-box' }}
+        />
+      </div>
       <p className="text-[8px] text-neutral-700">30 gün kala sarı, geçince kırmızı</p>
     </div>
   )
@@ -150,20 +163,22 @@ function FormField({ label, value, onChange, type = "text", placeholder }: {
     <div>
       <label className="block text-[8px] tracking-[0.3em] text-neutral-600 mb-1.5 uppercase">{label}</label>
       <input type={type} value={value} onChange={e => onChange(e.target.value)} placeholder={placeholder}
-        className="w-full bg-black/40 border border-white/[0.08] rounded-xl text-sm text-white px-3.5 py-2.5 focus:outline-none focus:border-red-500/50 transition-colors placeholder:text-neutral-800" />
+        className="w-full bg-black/40 border border-white/[0.08] rounded-xl text-sm text-white px-3.5 py-2.5 focus:outline-none focus:border-red-500/50 transition-colors placeholder:text-neutral-800"
+        style={{ maxWidth: '100%', boxSizing: 'border-box' }} />
     </div>
   )
 }
 
-function FormSelect({ label, value, onChange, options, labels }: {
-  label: string; value: string; onChange: (v: string) => void; options: string[]; labels?: string[]
+function FormSelect({ label, value, onChange, options }: {
+  label: string; value: string; onChange: (v: string) => void; options: string[]
 }) {
   return (
     <div>
       <label className="block text-[8px] tracking-[0.3em] text-neutral-600 mb-1.5 uppercase">{label}</label>
       <select value={value} onChange={e => onChange(e.target.value)}
-        className="w-full bg-black/40 border border-white/[0.08] rounded-xl text-sm text-white px-3.5 py-2.5 focus:outline-none focus:border-red-500/50 transition-colors">
-        {options.map((opt, i) => <option key={opt} value={opt}>{labels ? labels[i] : opt || "Seçiniz"}</option>)}
+        className="w-full bg-black/40 border border-white/[0.08] rounded-xl text-sm text-white px-3.5 py-2.5 focus:outline-none focus:border-red-500/50 transition-colors"
+        style={{ maxWidth: '100%', boxSizing: 'border-box' }}>
+        {options.map(opt => <option key={opt} value={opt}>{opt || "Seçiniz"}</option>)}
       </select>
     </div>
   )

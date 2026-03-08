@@ -139,16 +139,16 @@ function DocSection({ title, data, onChange }: {
   onChange: (d: any) => void
 }) {
   return (
-    <div className="bg-[#0d0d0d] border border-white/[0.07] rounded-2xl p-5 space-y-3">
+    <div className="bg-[#0d0d0d] border border-white/[0.07] rounded-2xl p-5 space-y-3" style={{overflow:"hidden", maxWidth:"100%"}}>
       <p className="text-[9px] tracking-[0.35em] text-red-500/80 uppercase">{title}</p>
-      <div>
+      <div style={{overflow:'hidden'}}>
         <label className="block text-[8px] tracking-[0.3em] text-neutral-600 mb-1.5 uppercase">BİTİŞ TARİHİ</label>
         <input
           type="date"
           value={data.date || ""}
           onChange={e => onChange({ ...data, date: e.target.value })}
-          className="w-full bg-black/40 border border-white/[0.08] rounded-xl text-sm text-white px-3.5 py-2.5 focus:outline-none focus:border-red-500/50 transition-colors"
-          style={{ maxWidth: '100%', boxSizing: 'border-box' }}
+          className="bg-black/40 border border-white/[0.08] rounded-xl text-sm text-white px-3.5 py-2.5 focus:outline-none focus:border-red-500/50 transition-colors"
+          style={{ width:'100%', maxWidth:'100%', boxSizing:'border-box', display:'block', WebkitAppearance:'none' }}
         />
       </div>
       <p className="text-[8px] text-neutral-700">30 gün kala sarı, geçince kırmızı</p>

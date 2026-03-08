@@ -101,35 +101,35 @@ export function VehicleForm() {
 
         <DocSection
           title="SİGORTA"
-          note="Poliçe bitiş tarihini gir"
+          note="Bitiş tarihini gir"
           data={formData.sigorta!}
           onChange={d => setFormData({ ...formData, sigorta: d })}
           showAmount showInstitution
         />
         <DocSection
           title="KASKO"
-          note="Poliçe bitiş tarihini gir"
+          note="Bitiş tarihini gir"
           data={formData.kasko!}
           onChange={d => setFormData({ ...formData, kasko: d })}
           showAmount showInstitution
         />
         <DocSection
           title="MTV 1. TAKSİT"
-          note="Son ödeme: 31 Ocak"
+          note="Bitiş tarihini gir"
           data={formData.mtv1!}
           onChange={d => setFormData({ ...formData, mtv1: d })}
           showAmount
         />
         <DocSection
           title="MTV 2. TAKSİT"
-          note="Son ödeme: 31 Temmuz"
+          note="Bitiş tarihini gir"
           data={formData.mtv2!}
           onChange={d => setFormData({ ...formData, mtv2: d })}
           showAmount
         />
         <DocSection
           title="MUAYENE"
-          note={`Son muayene tarihini gir (${categoryKey === 'Ticari' ? 'ticari=1 yıl' : 'binek=2 yıl'})`}
+          note="Bitiş tarihini gir"
           data={formData.muayene!}
           onChange={d => setFormData({ ...formData, muayene: d })}
         />
@@ -169,11 +169,11 @@ function DocSection({ title, note, data, onChange, showAmount = false, showInsti
         {note && <p className="text-[8px] text-neutral-600">{note}</p>}
       </div>
       <div className="grid grid-cols-2 gap-4">
-        <FormField label="YAPILIŞ / ÖDEME TARİHİ" type="date" value={data.date || ""} onChange={v => onChange({ ...data, date: v })} />
+        <FormField label="BİTİŞ TARİHİ" type="date" value={data.date || ""} onChange={v => onChange({ ...data, date: v })} />
         {showAmount && <FormField label="TUTAR (₺)" type="number" value={data.amount?.toString() || ""} onChange={v => onChange({ ...data, amount: v ? parseInt(v) : undefined })} placeholder="5000" />}
       </div>
       {showInstitution && <FormField label="KURUM" value={data.institution || ""} onChange={v => onChange({ ...data, institution: v })} placeholder="Mapfre Sigorta" />}
-      <p className="text-[8px] text-neutral-700">Tarih girilince durum otomatik hesaplanır</p>
+      <p className="text-[8px] text-neutral-700">45 gün kala sarı, geçince kırmızı</p>
     </div>
   )
 }

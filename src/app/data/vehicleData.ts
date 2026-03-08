@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabase'
+import { autoCalculateStatuses } from './statusEngine'
 
 export type StatusType = "valid" | "warning" | "expired"
 
@@ -33,9 +34,8 @@ export interface Alert {
   status: StatusType
 }
 
-// Supabase row → Vehicle
 function rowToVehicle(row: any): Vehicle {
-  return {
+  const raw = {
     id: row.id,
     category: row.category,
     licensePlate: row.license_plate,
@@ -50,42 +50,45 @@ function rowToVehicle(row: any): Vehicle {
     mileage: row.mileage,
     owner: row.owner,
     registrationOwner: row.registration_owner,
-    sigorta: { status: row.sigorta_status, date: row.sigorta_date, amount: row.sigorta_amount, institution: row.sigorta_institution },
-    kasko: { status: row.kasko_status, date: row.kasko_date, amount: row.kasko_amount, institution: row.kasko_institution },
-    mtv: { status: row.mtv_status, date: row.mtv_date, amount: row.mtv_amount },
-    muayene: { status: row.muayene_status, date: row.muayene_date },
+    sigorta: { status: row.sigorta_status as StatusType, date: row.sigorta_date, amount: row.sigorta_amount, institution: row.sigorta_institution },
+    kasko: { status: row.kasko_status as StatusType, date: row.kasko_date, amount: row.kasko_amount, institution: row.kasko_institution },
+    mtv: { status: row.mtv_status as StatusType, date: row.mtv_date, amount: row.mtv_amount },
+    muayene: { status: row.muayene_status as StatusType, date: row.muayene_date },
   }
+  // Tarihlere göre statüsü yeniden hesapla (gerçek zamanlı)
+  return autoCalculateStatuses(raw) as Vehicle
 }
 
-// Vehicle → Supabase row
 function vehicleToRow(v: Omit<Vehicle, 'id'>) {
+  // Kaydetmeden önce statüsleri hesapla
+  const calculated = autoCalculateStatuses(v)
   return {
-    category: v.category,
-    license_plate: v.licensePlate,
-    brand: v.brand || null,
-    model: v.model,
-    model_year: v.modelYear || null,
-    engine: v.engine || null,
-    horsepower: v.horsepower || null,
-    fuel: v.fuel || null,
-    transmission: v.transmission || null,
-    color: v.color || null,
-    mileage: v.mileage || null,
-    owner: v.owner || null,
-    registration_owner: v.registrationOwner || null,
-    sigorta_status: v.sigorta.status,
-    sigorta_date: v.sigorta.date || null,
-    sigorta_amount: v.sigorta.amount || null,
-    sigorta_institution: v.sigorta.institution || null,
-    kasko_status: v.kasko.status,
-    kasko_date: v.kasko.date || null,
-    kasko_amount: v.kasko.amount || null,
-    kasko_institution: v.kasko.institution || null,
-    mtv_status: v.mtv.status,
-    mtv_date: v.mtv.date || null,
-    mtv_amount: v.mtv.amount || null,
-    muayene_status: v.muayene.status,
-    muayene_date: v.muayene.date || null,
+    category: calculated.category,
+    license_plate: calculated.licensePlate,
+    brand: calculated.brand || null,
+    model: calculated.model,
+    model_year: calculated.modelYear || null,
+    engine: calculated.engine || null,
+    horsepower: calculated.horsepower || null,
+    fuel: calculated.fuel || null,
+    transmission: calculated.transmission || null,
+    color: calculated.color || null,
+    mileage: calculated.mileage || null,
+    owner: calculated.owner || null,
+    registration_owner: calculated.registrationOwner || null,
+    sigorta_status: calculated.sigorta.status,
+    sigorta_date: calculated.sigorta.date || null,
+    sigorta_amount: calculated.sigorta.amount || null,
+    sigorta_institution: calculated.sigorta.institution || null,
+    kasko_status: calculated.kasko.status,
+    kasko_date: calculated.kasko.date || null,
+    kasko_amount: calculated.kasko.amount || null,
+    kasko_institution: calculated.kasko.institution || null,
+    mtv_status: calculated.mtv.status,
+    mtv_date: calculated.mtv.date || null,
+    mtv_amount: calculated.mtv.amount || null,
+    muayene_status: calculated.muayene.status,
+    muayene_date: calculated.muayene.date || null,
   }
 }
 
@@ -117,7 +120,13 @@ export function generateAlerts(vehicleList: Vehicle[]): Alert[] {
       const alerts: Alert[] = []
       const check = (type: "Sigorta" | "Kasko" | "MTV" | "Muayene", doc: { status: StatusType; date?: string }) => {
         if ((doc.status === "expired" || doc.status === "warning") && doc.date) {
-          alerts.push({ id: `${vehicle.id}-${type}`, vehicleId: vehicle.id, vehicleName: `${vehicle.brand || ""} ${vehicle.model}`.trim(), licensePlate: vehicle.licensePlate, type, date: doc.date, status: doc.status })
+          alerts.push({
+            id: `${vehicle.id}-${type}`,
+            vehicleId: vehicle.id,
+            vehicleName: `${vehicle.brand || ""} ${vehicle.model}`.trim(),
+            licensePlate: vehicle.licensePlate,
+            type, date: doc.date, status: doc.status
+          })
         }
       }
       check("Sigorta", vehicle.sigorta)

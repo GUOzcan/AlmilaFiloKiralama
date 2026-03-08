@@ -99,10 +99,10 @@ export function VehicleForm() {
           <FormField label="RUHSAT SAHİBİ" value={formData.registrationOwner || ""} onChange={v => setFormData({ ...formData, registrationOwner: v })} placeholder="Almila Grup A.Ş." />
         </FormSection>
 
-        <DocSection title="SİGORTA" data={formData.sigorta!} onChange={d => setFormData({ ...formData, sigorta: d })} showAmount showInstitution />
-        <DocSection title="KASKO" data={formData.kasko!} onChange={d => setFormData({ ...formData, kasko: d })} showAmount showInstitution />
-        <DocSection title="MTV" data={formData.mtv!} onChange={d => setFormData({ ...formData, mtv: d })} showAmount />
-        <DocSection title="MUAYENE" data={formData.muayene!} onChange={d => setFormData({ ...formData, muayene: d })} />
+        <DocSection title="SİGORTA" note="Poliçe bitiş tarihi" data={formData.sigorta!} onChange={d => setFormData({ ...formData, sigorta: d })} showAmount showInstitution />
+        <DocSection title="KASKO" note="Poliçe bitiş tarihi" data={formData.kasko!} onChange={d => setFormData({ ...formData, kasko: d })} showAmount showInstitution />
+        <DocSection title="MTV" note="Son ödeme tarihi (31 Ocak veya 31 Temmuz)" data={formData.mtv!} onChange={d => setFormData({ ...formData, mtv: d })} showAmount />
+        <DocSection title="MUAYENE" note="Son muayene tarihi (binek=2yıl, ticari=1yıl)" data={formData.muayene!} onChange={d => setFormData({ ...formData, muayene: d })} />
       </div>
 
       <div className="fixed bottom-0 left-0 right-0 z-20 p-5 bg-gradient-to-t from-[#080808] via-[#080808]/90 to-transparent pointer-events-none flex justify-center">
@@ -126,13 +126,17 @@ function FormSection({ title, children }: { title: string; children: React.React
   )
 }
 
-function DocSection({ title, data, onChange, showAmount = false, showInstitution = false }: {
+function DocSection({ title, data, onChange, showAmount = false, showInstitution = false, note }: {
   title: string; data: { status: StatusType; date?: string; amount?: number; institution?: string }
-  onChange: (d: any) => void; showAmount?: boolean; showInstitution?: boolean
+  onChange: (d: any) => void; showAmount?: boolean; showInstitution?: boolean; note?: string
 }) {
   return (
     <div className="bg-[#0d0d0d] border border-white/[0.07] rounded-2xl p-5 space-y-4">
-      <p className="text-[9px] tracking-[0.35em] text-red-500/80 uppercase">{title}</p>
+      <div className="flex items-baseline justify-between">
+        <p className="text-[9px] tracking-[0.35em] text-red-500/80 uppercase">{title}</p>
+        {note && <p className="text-[8px] text-neutral-700">{note}</p>}
+      </div>
+      <p className="text-[8px] text-amber-600/70 tracking-wide">📅 Tarih girilince durum otomatik hesaplanır</p>
       <FormSelect label="DURUM" value={data.status} onChange={v => onChange({ ...data, status: v as StatusType })}
         options={["valid", "warning", "expired"]} labels={["GEÇERLİ", "YAKLAŞIYOR", "SÜRESİ DOLMUŞ"]} />
       <div className="grid grid-cols-2 gap-4">

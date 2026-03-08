@@ -14,7 +14,7 @@ export function Home() {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'space-between',
-        background: "radial-gradient(ellipse 100% 70% at 50% 0%, #2d0606 0%, #120202 45%, #080808 100%)"
+        background: "linear-gradient(180deg, #2d0606 0%, #120202 40%, #0a0101 70%, #080808 100%)"
       }}
     >
       {/* Üst kırmızı parlaklık */}

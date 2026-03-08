@@ -28,7 +28,7 @@ export function VehicleList() {
   }
 
   const getWorstStatus = (v: any): StatusType => {
-    const s = [v.sigorta.status, v.kasko.status, v.muayene.status]
+    const s = [v.sigorta.status, v.kasko.status, v.muayene.status, v.mtv1?.status || "valid", v.mtv2?.status || "valid"]
     if (s.includes("expired")) return "expired"
     if (s.includes("warning")) return "warning"
     return "valid"
@@ -41,7 +41,7 @@ export function VehicleList() {
     <div className="min-h-screen bg-[#080808] text-white font-sans pb-20" style={{overflowX:"hidden"}}>
       <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[700px] h-[200px] bg-red-600/[0.03] blur-[80px] pointer-events-none" />
 
-      <div className="sticky top-0 z-20 bg-[#080808]/85 backdrop-blur-xl border-b border-white/[0.06] px-5 py-4 flex items-center justify-between">
+      <div className="sticky top-0 z-20 bg-[#080808] border-b border-white/[0.06] px-5 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Link to="/" className="w-9 h-9 flex items-center justify-center rounded-full border border-white/[0.08] text-neutral-400 hover:text-white transition-all">
             <ArrowLeft className="w-4 h-4" />
@@ -80,7 +80,7 @@ export function VehicleList() {
                           <span className="text-sm font-light text-neutral-200 truncate">{vehicle.brand && `${vehicle.brand} `}{vehicle.model}</span>
                         </div>
                         <div className="flex gap-3.5 justify-center mt-1">
-                          {[["SİGORTA", vehicle.sigorta.status], ["KASKO", vehicle.kasko.status], ["MUAYENE", vehicle.muayene.status]].map(([label, status]) => (
+                          {[["SİGORTA", vehicle.sigorta.status], ["KASKO", vehicle.kasko.status], ["MUAYENE", vehicle.muayene.status], ["MTV1", vehicle.mtv1?.status || "valid"], ["MTV2", vehicle.mtv2?.status || "valid"]].map(([label, status]) => (
                             <div key={label} className="flex items-center gap-1.5">
                               <div className={`w-1.5 h-1.5 rounded-full ${getStatusColor(status as StatusType)}`} />
                               <span className="text-[8px] tracking-[0.15em] text-neutral-600">{label}</span>

@@ -49,21 +49,23 @@ export function VehicleDetail() {
     </div>
   )
 
-  const allStatuses = [vehicle.sigorta.status, vehicle.kasko.status, vehicle.muayene.status]
+  const allStatuses = [vehicle.sigorta.status, vehicle.kasko.status, vehicle.muayene.status, vehicle.mtv1?.status || "valid", vehicle.mtv2?.status || "valid"]
   const overallStatus = allStatuses.includes("expired") ? "expired" : allStatuses.includes("warning") ? "warning" : "valid"
   const overallConfig = getStatusConfig(overallStatus)
 
   const docs = [
-    { title: "Sigorta",  status: vehicle.sigorta.status,  date: vehicle.sigorta.date },
-    { title: "Kasko",    status: vehicle.kasko.status,    date: vehicle.kasko.date },
-    { title: "Muayene",  status: vehicle.muayene.status,  date: vehicle.muayene.date },
+    { title: "Sigorta",       status: vehicle.sigorta.status,           date: vehicle.sigorta.date },
+    { title: "Kasko",         status: vehicle.kasko.status,             date: vehicle.kasko.date },
+    { title: "Muayene",       status: vehicle.muayene.status,           date: vehicle.muayene.date },
+    { title: "MTV 1. Taksit", status: vehicle.mtv1?.status || "valid",  date: vehicle.mtv1?.date },
+    { title: "MTV 2. Taksit", status: vehicle.mtv2?.status || "valid",  date: vehicle.mtv2?.date },
   ]
 
   return (
     <div className="min-h-screen bg-[#080808] text-white font-sans pb-24 relative overflow-hidden">
       <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[600px] h-[200px] bg-red-600/[0.04] blur-[80px] pointer-events-none" />
 
-      <div className="sticky top-0 z-20 bg-[#080808]/85 backdrop-blur-xl border-b border-white/[0.06] px-5 py-4 flex items-center justify-between"
+      <div className="sticky top-0 z-20 bg-[#080808] border-b border-white/[0.06] px-5 py-4 flex items-center justify-between"
         style={{ paddingTop: 'max(16px, env(safe-area-inset-top))' }}>
         <Link to={`/vehicles/${category}`} className="w-9 h-9 flex items-center justify-center rounded-full border border-white/[0.08] text-neutral-400 hover:text-white transition-all">
           <ArrowLeft className="w-4 h-4" />

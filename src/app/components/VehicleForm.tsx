@@ -14,7 +14,7 @@ export function VehicleForm() {
 
   const [formData, setFormData] = useState<Partial<Vehicle>>({
     category: categoryKey, licensePlate: "", model: "",
-    sigorta: emptyDoc, kasko: emptyDoc, muayene: emptyDoc,
+    sigorta: emptyDoc, kasko: emptyDoc, mtv1: emptyDoc, mtv2: emptyDoc, muayene: emptyDoc,
   })
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
@@ -37,6 +37,8 @@ export function VehicleForm() {
       ...formData, category: categoryKey,
       sigorta: formData.sigorta || emptyDoc,
       kasko: formData.kasko || emptyDoc,
+      mtv1: formData.mtv1 || emptyDoc,
+      mtv2: formData.mtv2 || emptyDoc,
       muayene: formData.muayene || emptyDoc,
     } as Omit<Vehicle, "id">
 
@@ -100,6 +102,8 @@ export function VehicleForm() {
 
         <DocSection title="SİGORTA BİTİŞ TARİHİ" data={formData.sigorta!} onChange={d => setFormData({ ...formData, sigorta: d })} />
         <DocSection title="KASKO BİTİŞ TARİHİ"   data={formData.kasko!}   onChange={d => setFormData({ ...formData, kasko: d })} />
+        <DocSection title="MTV 1. TAKSİT BİTİŞ TARİHİ" data={formData.mtv1!} onChange={d => setFormData({ ...formData, mtv1: d })} />
+        <DocSection title="MTV 2. TAKSİT BİTİŞ TARİHİ" data={formData.mtv2!} onChange={d => setFormData({ ...formData, mtv2: d })} />
         <DocSection title="MUAYENE BİTİŞ TARİHİ" data={formData.muayene!} onChange={d => setFormData({ ...formData, muayene: d })} />
       </div>
 

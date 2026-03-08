@@ -25,6 +25,8 @@ export interface Vehicle {
   mileage?: number
   sigorta: DocField
   kasko: DocField
+  mtv1: DocField
+  mtv2: DocField
   muayene: { status: StatusType; date?: string }
 }
 
@@ -34,7 +36,7 @@ export interface Alert {
   vehicleCategory: "Yönetim" | "Ticari"
   vehicleName: string
   licensePlate: string
-  type: "Sigorta" | "Kasko" | "Muayene"
+  type: "Sigorta" | "Kasko" | "MTV 1" | "MTV 2" | "Muayene"
   date: string
   status: StatusType
 }
@@ -57,6 +59,8 @@ function rowToVehicle(row: any): Vehicle {
     registrationOwner: row.registration_owner,
     sigorta: { status: row.sigorta_status as StatusType, date: row.sigorta_date, amount: row.sigorta_amount, institution: row.sigorta_institution },
     kasko: { status: row.kasko_status as StatusType, date: row.kasko_date, amount: row.kasko_amount, institution: row.kasko_institution },
+    mtv1: { status: (row.mtv1_status || 'valid') as StatusType, date: row.mtv1_date },
+    mtv2: { status: (row.mtv2_status || 'valid') as StatusType, date: row.mtv2_date },
     muayene: { status: row.muayene_status as StatusType, date: row.muayene_date },
   }
   return autoCalculateStatuses(raw) as Vehicle
@@ -91,6 +95,10 @@ function vehicleToRow(v: Omit<Vehicle, 'id'>) {
     mtv2_status: c.mtv2.status,
     mtv2_date: c.mtv2.date || null,
     mtv2_amount: c.mtv2.amount ?? null,
+    mtv1_status: c.mtv1?.status || 'valid',
+    mtv1_date: c.mtv1?.date || null,
+    mtv2_status: c.mtv2?.status || 'valid',
+    mtv2_date: c.mtv2?.date || null,
     muayene_status: c.muayene.status,
     muayene_date: c.muayene.date || null,
   }
@@ -129,6 +137,8 @@ export function generateAlerts(vehicleList: Vehicle[]): Alert[] {
       }
       check("Sigorta", vehicle.sigorta)
       check("Kasko", vehicle.kasko)
+      check("MTV 1", vehicle.mtv1)
+      check("MTV 2", vehicle.mtv2)
       check("Muayene", vehicle.muayene)
       return alerts
     })

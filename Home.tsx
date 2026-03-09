@@ -20,6 +20,16 @@ export function Home() {
         background: "linear-gradient(180deg, #2d0606 0%, #120202 40%, #0a0101 70%, #080808 100%)",
       }}
     >
+      {/* Safari status bar renk sızmasını önle — safe area kadar siyah overlay */}
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        height: 'env(safe-area-inset-top, 44px)',
+        background: '#080808',
+        zIndex: 100,
+      }} />
       <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-red-800/30 rounded-full blur-[120px] pointer-events-none" />
 
       <motion.div

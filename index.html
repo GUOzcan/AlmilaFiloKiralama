@@ -2,7 +2,8 @@
 <html lang="tr">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <!-- maximum-scale=1, user-scalable=no → zoom tamamen kapalı -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <title>Almila Filo Kiralama</title>
 
     <!-- PWA -->
@@ -11,25 +12,26 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="Almila Filo" />
-
-    <!-- Apple Touch Icon - 512px kullan, arka planı uygulama yönetir -->
     <link rel="apple-touch-icon" href="/icon-512.png" />
     <link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png" />
     <link rel="apple-touch-icon" sizes="512x512" href="/icon-512.png" />
 
-    <!-- SEO/Share block -->
     <meta name="description" content="Almila Filo Kiralama Araç Yönetim Sistemi" />
     <meta property="og:title" content="Almila Filo Kiralama" />
     <meta property="og:description" content="Araç filo yönetim sistemi" />
     <meta property="og:image" content="/icon-512.png" />
 
     <style>
-      /* #root padding-top KALDIRILDI — her sayfa kendi safe-area'sını yönetiyor */
       html, body, #root {
         margin: 0;
         padding: 0;
         height: 100%;
         background: #080808;
+        /* Overscroll / pull-to-refresh tamamen kapat */
+        overscroll-behavior: none;
+        overscroll-behavior-y: none;
+        /* touch-action: pan ile sadece scroll, zoom yok */
+        touch-action: pan-x pan-y;
       }
     </style>
   </head>
@@ -37,6 +39,11 @@
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     <script>
+      // Pinch zoom ve pull-down gesture engelle
+      document.addEventListener('gesturestart', function(e) { e.preventDefault(); }, { passive: false });
+      document.addEventListener('gesturechange', function(e) { e.preventDefault(); }, { passive: false });
+      document.addEventListener('gestureend', function(e) { e.preventDefault(); }, { passive: false });
+
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
           navigator.serviceWorker.register('/sw.js');

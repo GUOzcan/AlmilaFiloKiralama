@@ -11,20 +11,27 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="Almila Filo" />
-    <link rel="apple-touch-icon" href="/icon-192.png" />
+
+    <!-- Apple Touch Icon - 512px kullan, arka planı uygulama yönetir -->
+    <link rel="apple-touch-icon" href="/icon-512.png" />
+    <link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png" />
+    <link rel="apple-touch-icon" sizes="512x512" href="/icon-512.png" />
 
     <!-- SEO/Share block -->
     <meta name="description" content="Almila Filo Kiralama Araç Yönetim Sistemi" />
     <meta property="og:title" content="Almila Filo Kiralama" />
     <meta property="og:description" content="Araç filo yönetim sistemi" />
     <meta property="og:image" content="/icon-512.png" />
-  <style>
-    /* Prevent content from going under Dynamic Island / notch */
-    #root {
-      padding-top: env(safe-area-inset-top);
-      padding-top: constant(safe-area-inset-top);
-    }
-  </style>
+
+    <style>
+      /* #root padding-top KALDIRILDI — her sayfa kendi safe-area'sını yönetiyor */
+      html, body, #root {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        background: #080808;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>

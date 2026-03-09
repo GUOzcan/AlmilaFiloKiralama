@@ -11,39 +11,22 @@
   display: none;
 }
 
-/* Body overflow kilitle */
-html, body, #root {
+/* Body base */
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #080808;
   overflow-x: hidden;
-  max-width: 100vw;
-  overscroll-behavior: none;
-}
-
-/* Safari / Mac scroll fix */
-html {
-  height: 100%;
-  height: -webkit-fill-available;
-}
-
-body {
-  min-height: 100vh;
-  min-height: -webkit-fill-available;
+  /* Safari iOS scroll fix */
   -webkit-overflow-scrolling: touch;
 }
 
-/* Scrollable sayfalar için */
-.page-scroll {
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  height: 100%;
+#root {
+  /* padding-top YOK — her sayfa kendi safe-area'sını yönetiyor */
+  overflow-x: hidden;
 }
 
 /* Date input taşmasını önle */
-input[type="date"] {
-  max-width: 100%;
-  box-sizing: border-box;
-}
-
-/* iPhone date input fix */
 input[type="date"] {
   display: block;
   width: 100% !important;

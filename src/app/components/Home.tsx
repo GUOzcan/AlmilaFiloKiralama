@@ -8,25 +8,26 @@ export function Home() {
       className="font-sans selection:bg-red-600 selection:text-white"
       style={{
         position: 'fixed',
-        top: 0, left: 0, right: 0, bottom: 0,
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
         overflow: 'hidden',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'space-between',
         background: "linear-gradient(180deg, #2d0606 0%, #120202 40%, #0a0101 70%, #080808 100%)",
-        paddingBottom: 'env(safe-area-inset-bottom, 0px)',
       }}
     >
-      {/* Üst kırmızı parlaklık */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-red-800/30 rounded-full blur-[120px] pointer-events-none" />
 
-      {/* LOGO — ortalı */}
       <motion.div
         initial={{ opacity: 0, y: -16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.0, ease: "easeOut" }}
         className="relative z-10 flex-1 flex flex-col items-center justify-center w-full px-8"
+        style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}
       >
         <img
           src="/logo.png"
@@ -36,18 +37,14 @@ export function Home() {
         />
       </motion.div>
 
-      {/* KARTLAR — alt */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
         className="relative z-10 w-full px-6 flex flex-col gap-3"
-        style={{ paddingBottom: 'max(40px, env(safe-area-inset-bottom))' }}
+        style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 40px)' }}
       >
-        <Link
-          to="/vehicles/yonetim"
-          className="group relative flex items-center justify-between bg-black/50 border border-white/[0.08] hover:border-red-600/50 active:border-red-600/50 backdrop-blur-sm transition-all duration-300 px-6 py-5 rounded-2xl overflow-hidden"
-        >
+        <Link to="/vehicles/yonetim" className="group relative flex items-center justify-between bg-black/50 border border-white/[0.08] hover:border-red-600/50 active:border-red-600/50 backdrop-blur-sm transition-all duration-300 px-6 py-5 rounded-2xl overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-red-900/25 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           <div className="relative z-10 flex items-center gap-4">
             <div className="w-10 h-10 rounded-xl border border-white/[0.08] group-hover:border-red-500/40 flex items-center justify-center transition-colors duration-300">
@@ -58,10 +55,7 @@ export function Home() {
           <ChevronRight className="w-4 h-4 text-neutral-700 group-hover:text-red-500 transition-colors duration-300 relative z-10" />
         </Link>
 
-        <Link
-          to="/vehicles/ticari"
-          className="group relative flex items-center justify-between bg-black/50 border border-white/[0.08] hover:border-red-600/50 active:border-red-600/50 backdrop-blur-sm transition-all duration-300 px-6 py-5 rounded-2xl overflow-hidden"
-        >
+        <Link to="/vehicles/ticari" className="group relative flex items-center justify-between bg-black/50 border border-white/[0.08] hover:border-red-600/50 active:border-red-600/50 backdrop-blur-sm transition-all duration-300 px-6 py-5 rounded-2xl overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-red-900/25 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           <div className="relative z-10 flex items-center gap-4">
             <div className="w-10 h-10 rounded-xl border border-white/[0.08] group-hover:border-red-500/40 flex items-center justify-center transition-colors duration-300">
@@ -72,10 +66,7 @@ export function Home() {
           <ChevronRight className="w-4 h-4 text-neutral-700 group-hover:text-red-500 transition-colors duration-300 relative z-10" />
         </Link>
 
-        <Link
-          to="/kontrol-paneli"
-          className="group relative flex items-center justify-between bg-black/50 border border-white/[0.08] hover:border-red-600/50 active:border-red-600/50 backdrop-blur-sm transition-all duration-300 px-6 py-5 rounded-2xl overflow-hidden"
-        >
+        <Link to="/kontrol-paneli" className="group relative flex items-center justify-between bg-black/50 border border-white/[0.08] hover:border-red-600/50 active:border-red-600/50 backdrop-blur-sm transition-all duration-300 px-6 py-5 rounded-2xl overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-red-900/25 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           <div className="relative z-10 flex items-center gap-4">
             <div className="w-10 h-10 rounded-xl border border-white/[0.08] group-hover:border-red-500/40 flex items-center justify-center transition-colors duration-300">

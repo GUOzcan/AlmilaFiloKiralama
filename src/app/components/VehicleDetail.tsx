@@ -62,11 +62,11 @@ export function VehicleDetail() {
   ]
 
   return (
-    <div className="min-h-screen bg-[#080808] text-white font-sans pb-24 relative" style={{overflowX:"hidden", overflowY:"auto", WebkitOverflowScrolling:"touch", minHeight:"-webkit-fill-available"}}>
+    <div className="bg-[#080808] text-white font-sans relative" style={{minHeight:"100vh", overflowX:"hidden", overflowY:"auto", WebkitOverflowScrolling:"touch" as any, paddingBottom:"calc(env(safe-area-inset-bottom, 0px) + 96px)"}}>
       <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[600px] h-[200px] bg-red-600/[0.04] blur-[80px] pointer-events-none" />
 
-      <div className="fixed top-0 left-0 right-0 z-20 bg-[#080808] border-b border-white/[0.06] px-5 py-4 flex items-center justify-between"
-        style={{ paddingTop: 'max(16px, env(safe-area-inset-top))' }}>
+      <div className="fixed top-0 left-0 right-0 z-20 bg-[#080808] border-b border-white/[0.06] px-5 flex items-center justify-between"
+        style={{ paddingTop: 'max(16px, env(safe-area-inset-top))', paddingBottom: '16px' }}>
         <Link to={`/vehicles/${category}`} className="w-9 h-9 flex items-center justify-center rounded-full border border-white/[0.08] text-neutral-400 hover:text-white transition-all">
           <ArrowLeft className="w-4 h-4" />
         </Link>
@@ -81,7 +81,7 @@ export function VehicleDetail() {
         </div>
       </div>
 
-      <div className="max-w-lg mx-auto px-5 pb-4 relative z-10" style={{paddingTop:"80px"}}>
+      <div className="max-w-lg mx-auto px-5 pb-4 relative z-10" style={{paddingTop:'calc(max(16px, env(safe-area-inset-top)) + 56px)'}}>
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
           className="relative bg-[#0d0d0d] border border-white/[0.07] rounded-2xl p-7 mb-5 overflow-hidden">
           <div className={`absolute top-0 right-0 w-40 h-40 rounded-full blur-3xl opacity-20 ${overallStatus === 'valid' ? 'bg-emerald-500' : overallStatus === 'warning' ? 'bg-amber-500' : 'bg-red-500'}`} />

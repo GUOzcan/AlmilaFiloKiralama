@@ -38,10 +38,27 @@ export function VehicleList() {
   const itemVariants = { hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } } }
 
   return (
-    <div className="min-h-screen bg-[#080808] text-white font-sans pb-20" style={{overflowX:"hidden", overflowY:"auto", WebkitOverflowScrolling:"touch", minHeight:"-webkit-fill-available"}}>
+    <div
+      className="bg-[#080808] text-white font-sans"
+      style={{
+        minHeight: '100vh',
+        overflowX: 'hidden',
+        overflowY: 'auto',
+        WebkitOverflowScrolling: 'touch' as any,
+        paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 80px)',
+      }}
+    >
       <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[700px] h-[200px] bg-red-600/[0.03] blur-[80px] pointer-events-none" />
 
-      <div className="fixed top-0 left-0 right-0 z-20 bg-[#080808] border-b border-white/[0.06] px-5 py-4 flex items-center justify-between">
+      {/* FIXED HEADER — safe-area-inset-top ile doğru konumlanıyor */}
+      <div
+        className="fixed left-0 right-0 z-20 bg-[#080808] border-b border-white/[0.06] px-5 flex items-center justify-between"
+        style={{
+          top: 0,
+          paddingTop: 'max(16px, env(safe-area-inset-top))',
+          paddingBottom: '16px',
+        }}
+      >
         <div className="flex items-center gap-3">
           <Link to="/" className="w-9 h-9 flex items-center justify-center rounded-full border border-white/[0.08] text-neutral-400 hover:text-white transition-all">
             <ArrowLeft className="w-4 h-4" />
@@ -53,7 +70,11 @@ export function VehicleList() {
         </Link>
       </div>
 
-      <div className="max-w-lg mx-auto px-5 py-6 relative z-10" style={{paddingTop:"80px"}}>
+      {/* İçerik — header yüksekliği + safe area kadar aşağıdan başlıyor */}
+      <div
+        className="max-w-lg mx-auto px-5 py-6 relative z-10"
+        style={{ paddingTop: 'calc(max(16px, env(safe-area-inset-top)) + 56px)' }}
+      >
         {loading ? (
           <div className="flex justify-center py-24">
             <div className="w-5 h-5 border border-red-500/40 border-t-red-500 rounded-full animate-spin" />

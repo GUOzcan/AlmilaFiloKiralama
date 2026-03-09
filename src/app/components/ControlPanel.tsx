@@ -1,5 +1,5 @@
 import { loadVehicles, generateAlerts } from "../data/vehicleData"
-import { AlertCircle, AlertTriangle, ArrowLeft, Car } from "lucide-react"
+import { AlertCircle, AlertTriangle, ArrowLeft, Car, Truck } from "lucide-react"
 import { Link } from "react-router"
 import { motion } from "motion/react"
 import { useState, useEffect } from "react"
@@ -23,10 +23,27 @@ export function ControlPanel() {
   const itemVariants = { hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0, transition: { duration: 0.45 } } }
 
   return (
-    <div className="min-h-screen bg-[#080808] text-white font-sans pb-24 relative" style={{overflowX:"hidden", overflowY:"auto", WebkitOverflowScrolling:"touch", minHeight:"-webkit-fill-available"}}>
+    <div
+      className="bg-[#080808] text-white font-sans relative"
+      style={{
+        minHeight: '100vh',
+        overflowX: 'hidden',
+        overflowY: 'auto',
+        WebkitOverflowScrolling: 'touch' as any,
+        paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 96px)',
+      }}
+    >
       <div className="fixed top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[250px] bg-red-600/[0.025] blur-[90px] pointer-events-none" />
 
-      <div className="fixed top-0 left-0 right-0 z-20 bg-[#080808] border-b border-white/[0.06] px-5 py-4 flex items-center justify-between">
+      {/* FIXED HEADER */}
+      <div
+        className="fixed left-0 right-0 z-20 bg-[#080808] border-b border-white/[0.06] px-5 flex items-center justify-between"
+        style={{
+          top: 0,
+          paddingTop: 'max(16px, env(safe-area-inset-top))',
+          paddingBottom: '16px',
+        }}
+      >
         <Link to="/" className="w-9 h-9 flex items-center justify-center rounded-full border border-white/[0.08] text-neutral-400 hover:text-white transition-all">
           <ArrowLeft className="w-4 h-4" />
         </Link>
@@ -35,12 +52,20 @@ export function ControlPanel() {
       </div>
 
       {loading ? (
-        <div className="flex justify-center py-24">
+        <div className="flex justify-center" style={{ paddingTop: 'calc(max(16px, env(safe-area-inset-top)) + 80px)' }}>
           <div className="w-5 h-5 border border-red-500/40 border-t-red-500 rounded-full animate-spin" />
         </div>
       ) : (
-        <motion.div variants={containerVariants} initial="hidden" animate="show" className="max-w-lg mx-auto px-5 py-6 relative z-10" style={{paddingTop:"80px"}}>
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="show"
+          className="max-w-lg mx-auto px-5 py-6 relative z-10"
+          style={{ paddingTop: 'calc(max(16px, env(safe-area-inset-top)) + 56px)' }}
+        >
+          {/* TOPLAM ARAÇ + KRİTİK + DİKKAT */}
           <motion.div variants={itemVariants} className="grid grid-cols-2 gap-3 mb-6">
+            {/* Toplam Araç - 2 sütun */}
             <div className="col-span-2 bg-[#0d0d0d] border border-white/[0.07] rounded-2xl p-5 flex items-center justify-between">
               <div>
                 <span className="block text-[9px] tracking-[0.35em] text-neutral-600 mb-2">TOPLAM ARAÇ</span>
@@ -51,24 +76,29 @@ export function ControlPanel() {
                   <Car className="w-3 h-3" /><span>YÖNETİM</span><span className="text-white">{yonetimCount}</span>
                 </div>
                 <div className="flex items-center gap-2 text-[9px] tracking-[0.2em] text-neutral-500">
-                  <Car className="w-3 h-3" /><span>TİCARİ</span><span className="text-white">{ticariCount}</span>
+                  <Truck className="w-3 h-3" /><span>TİCARİ</span><span className="text-white">{ticariCount}</span>
                 </div>
               </div>
             </div>
-            <div className="bg-[#0d0d0d] border border-red-500/20 rounded-2xl p-5 relative" style={{overflowX:"hidden", overflowY:"auto", WebkitOverflowScrolling:"touch", minHeight:"-webkit-fill-available"}}>
-              <div className="absolute top-0 right-0 w-20 h-20 bg-red-500/10 rounded-full blur-2xl" />
+
+            {/* KRİTİK kutusu */}
+            <div className="bg-[#0d0d0d] border border-red-500/20 rounded-2xl p-5 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-20 h-20 bg-red-500/10 rounded-full blur-2xl pointer-events-none" />
               <span className="block text-[8px] tracking-[0.3em] text-red-400/70 mb-2">KRİTİK</span>
               <span className="text-3xl font-light text-white block mb-1">{redAlerts}</span>
               <span className="text-[8px] tracking-[0.2em] text-red-500/60">SÜRESİ DOLMUŞ</span>
             </div>
-            <div className="bg-[#0d0d0d] border border-amber-500/20 rounded-2xl p-5 relative" style={{overflowX:"hidden", overflowY:"auto", WebkitOverflowScrolling:"touch", minHeight:"-webkit-fill-available"}}>
-              <div className="absolute top-0 right-0 w-20 h-20 bg-amber-500/10 rounded-full blur-2xl" />
+
+            {/* DİKKAT kutusu */}
+            <div className="bg-[#0d0d0d] border border-amber-500/20 rounded-2xl p-5 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-20 h-20 bg-amber-500/10 rounded-full blur-2xl pointer-events-none" />
               <span className="block text-[8px] tracking-[0.3em] text-amber-400/70 mb-2">DİKKAT</span>
               <span className="text-3xl font-light text-white block mb-1">{yellowWarnings}</span>
               <span className="text-[8px] tracking-[0.2em] text-amber-500/60">YAKLAŞIYOR</span>
             </div>
           </motion.div>
 
+          {/* BEKLEYEN İŞLEMLER */}
           <motion.div variants={itemVariants}>
             <div className="flex items-center gap-3 mb-4">
               <span className="text-[9px] tracking-[0.35em] text-neutral-600 uppercase">Bekleyen İşlemler</span>

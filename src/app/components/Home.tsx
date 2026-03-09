@@ -8,13 +8,14 @@ export function Home() {
       className="font-sans selection:bg-red-600 selection:text-white"
       style={{
         position: 'fixed',
-        inset: 0,
+        top: 0, left: 0, right: 0, bottom: 0,
         overflow: 'hidden',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'space-between',
-        background: "linear-gradient(180deg, #2d0606 0%, #120202 40%, #0a0101 70%, #080808 100%)"
+        background: "linear-gradient(180deg, #2d0606 0%, #120202 40%, #0a0101 70%, #080808 100%)",
+        paddingBottom: 'env(safe-area-inset-bottom, 0px)',
       }}
     >
       {/* Üst kırmızı parlaklık */}

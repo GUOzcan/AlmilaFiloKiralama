@@ -88,8 +88,8 @@ export function VehicleForm() {
             <FormField label="RENK" value={formData.color || ""} onChange={v => setFormData({ ...formData, color: v })} placeholder="Siyah" />
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <FormField label="MOTOR" value={formData.engine || ""} onChange={v => setFormData({ ...formData, engine: v })} placeholder="2.0L" />
-            <FormField label="BEYGİR" type="number" value={formData.horsepower?.toString() || ""} onChange={v => setFormData({ ...formData, horsepower: v ? parseInt(v) : undefined })} placeholder="150" />
+            <FormField label="MOTOR (cc)" value={formData.engine || ""} onChange={v => setFormData({ ...formData, engine: v })} placeholder="1300" />
+            <FormField label="BEYGİR (kw)" type="number" value={formData.horsepower?.toString() || ""} onChange={v => setFormData({ ...formData, horsepower: v ? parseInt(v) : undefined })} placeholder="150" />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <FormSelect label="YAKIT" value={formData.fuel || ""} onChange={v => setFormData({ ...formData, fuel: v })} options={["", "Benzin", "Dizel", "Hibrit", "Elektrik", "LPG"]} />

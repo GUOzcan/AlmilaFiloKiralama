@@ -18,6 +18,25 @@ html, body, #root {
   overscroll-behavior: none;
 }
 
+/* Safari / Mac scroll fix */
+html {
+  height: 100%;
+  height: -webkit-fill-available;
+}
+
+body {
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Scrollable sayfalar için */
+.page-scroll {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  height: 100%;
+}
+
 /* Date input taşmasını önle */
 input[type="date"] {
   max-width: 100%;

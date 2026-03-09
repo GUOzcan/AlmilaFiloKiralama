@@ -7,3 +7,12 @@
     padding-bottom: env(safe-area-inset-bottom);
   }
 }
+
+/* iOS Safari fixed header + scroll fix */
+@supports (-webkit-touch-callout: none) {
+  .fixed-header {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+  }
+}

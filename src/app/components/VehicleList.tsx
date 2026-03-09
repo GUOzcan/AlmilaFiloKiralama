@@ -38,7 +38,7 @@ export function VehicleList() {
   const itemVariants = { hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } } }
 
   return (
-    <div className="min-h-screen bg-[#080808] text-white font-sans pb-20" style={{overflowX:"hidden"}}>
+    <div className="min-h-screen bg-[#080808] text-white font-sans pb-20" style={{overflowX:"hidden", overflowY:"auto", WebkitOverflowScrolling:"touch", minHeight:"-webkit-fill-available"}}>
       <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[700px] h-[200px] bg-red-600/[0.03] blur-[80px] pointer-events-none" />
 
       <div className="fixed top-0 left-0 right-0 z-20 bg-[#080808] border-b border-white/[0.06] px-5 py-4 flex items-center justify-between">

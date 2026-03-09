@@ -62,7 +62,7 @@ export function VehicleDetail() {
   ]
 
   return (
-    <div className="min-h-screen bg-[#080808] text-white font-sans pb-24 relative" style={{overflowX:"hidden"}}>
+    <div className="min-h-screen bg-[#080808] text-white font-sans pb-24 relative" style={{overflowX:"hidden", overflowY:"auto", WebkitOverflowScrolling:"touch", minHeight:"-webkit-fill-available"}}>
       <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[600px] h-[200px] bg-red-600/[0.04] blur-[80px] pointer-events-none" />
 
       <div className="fixed top-0 left-0 right-0 z-20 bg-[#080808] border-b border-white/[0.06] px-5 py-4 flex items-center justify-between"
@@ -121,8 +121,8 @@ export function VehicleDetail() {
             <div className="space-y-0.5">
               {vehicle.owner             && <InfoRow label="Araç Sahibi"   value={vehicle.owner} />}
               {vehicle.registrationOwner && <InfoRow label="Ruhsat Sahibi" value={vehicle.registrationOwner} />}
-              {vehicle.engine            && <InfoRow label="Motor"         value={vehicle.engine} />}
-              {vehicle.horsepower        && <InfoRow label="Beygir Gücü"   value={`${vehicle.horsepower} HP`} />}
+              {vehicle.engine            && <InfoRow label="Motor"         value={`${vehicle.engine} cc`} />}
+              {vehicle.horsepower        && <InfoRow label="Beygir Gücü"   value={`${vehicle.horsepower} kw`} />}
               {vehicle.mileage           && <InfoRow label="Kilometre"     value={`${vehicle.mileage.toLocaleString("tr-TR")} km`} />}
             </div>
           </motion.div>

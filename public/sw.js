@@ -1,4 +1,4 @@
-const CACHE_NAME = 'almila-filo-v1';
+const CACHE_NAME = 'almila-filo-v3';
 const urlsToCache = ['/', '/index.html'];
 
 self.addEventListener('install', e => {

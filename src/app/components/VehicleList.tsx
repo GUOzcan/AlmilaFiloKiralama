@@ -73,7 +73,7 @@ export function VehicleList() {
       {/* İçerik — header yüksekliği + safe area kadar aşağıdan başlıyor */}
       <div
         className="max-w-lg mx-auto px-5 py-6 relative z-10"
-        style={{ paddingTop: 'calc(max(16px, env(safe-area-inset-top)) + 56px)' }}
+        style={{ paddingTop: 'calc(max(16px, env(safe-area-inset-top)) + 68px)' }}
       >
         {loading ? (
           <div className="flex justify-center py-24">

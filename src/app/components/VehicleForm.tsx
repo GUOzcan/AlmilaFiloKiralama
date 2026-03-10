@@ -143,13 +143,24 @@ function DocSection({ title, data, onChange }: {
       <p className="text-[9px] tracking-[0.35em] text-red-500/80 uppercase">{title}</p>
       <div style={{overflow:'hidden'}}>
         <label className="block text-[8px] tracking-[0.3em] text-neutral-600 mb-1.5 uppercase">BİTİŞ TARİHİ</label>
-        <input
-          type="date"
-          value={data.date || ""}
-          onChange={e => onChange({ ...data, date: e.target.value })}
-          className="bg-black/40 border border-white/[0.08] rounded-xl text-sm text-white px-3.5 py-2.5 focus:outline-none focus:border-red-500/50 transition-colors"
-          style={{ width:'100%', maxWidth:'100%', boxSizing:'border-box', display:'block', WebkitAppearance:'none' }}
-        />
+        <div className="flex items-center gap-2">
+          <input
+            type="date"
+            value={data.date || ""}
+            onChange={e => onChange({ ...data, date: e.target.value })}
+            className="bg-black/40 border border-white/[0.08] rounded-xl text-sm text-white px-3.5 py-2.5 focus:outline-none focus:border-red-500/50 transition-colors"
+            style={{ flex:1, minWidth:0, boxSizing:'border-box', display:'block', WebkitAppearance:'none' }}
+          />
+          {data.date && (
+            <button
+              type="button"
+              onClick={() => onChange({ ...data, date: undefined })}
+              className="w-8 h-8 flex-shrink-0 flex items-center justify-center rounded-lg border border-white/[0.08] text-neutral-500 hover:text-red-400 hover:border-red-500/30 transition-all"
+            >
+              ✕
+            </button>
+          )}
+        </div>
       </div>
       <p className="text-[8px] text-neutral-700">30 gün kala sarı, geçince kırmızı</p>
     </div>

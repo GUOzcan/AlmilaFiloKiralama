@@ -105,9 +105,9 @@ export function VehicleForm() {
 
         <DocSection title="SİGORTA BİTİŞ TARİHİ" data={formData.sigorta!} onChange={d => setFormData({ ...formData, sigorta: d })} />
         <DocSection title="KASKO BİTİŞ TARİHİ"   data={formData.kasko!}   onChange={d => setFormData({ ...formData, kasko: d })} />
+        <DocSection title="MUAYENE BİTİŞ TARİHİ"  data={formData.muayene!} onChange={d => setFormData({ ...formData, muayene: d })} />
         <DocSection title="MTV 1"                  data={formData.mtv1!}    onChange={d => setFormData({ ...formData, mtv1: d })} />
         <DocSection title="MTV 2"                  data={formData.mtv2!}    onChange={d => setFormData({ ...formData, mtv2: d })} />
-        <DocSection title="MUAYENE BİTİŞ TARİHİ"  data={formData.muayene!} onChange={d => setFormData({ ...formData, muayene: d })} />
       </div>
 
       {/* FIXED BOTTOM BUTTON */}

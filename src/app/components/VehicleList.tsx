@@ -98,7 +98,7 @@ export function VehicleList() {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-3 mb-2.5">
                           <span className="inline-block bg-white text-black px-2.5 py-0.5 text-[10px] font-bold tracking-widest rounded-sm flex-shrink-0">{vehicle.licensePlate}</span>
-                          <span className="text-sm font-light text-neutral-200 truncate">{vehicle.brand && `${vehicle.brand} `}{vehicle.model}</span>
+                          <span className="text-sm font-light text-neutral-200 truncate">{vehicle.brand && <span className="font-bold">{vehicle.brand} </span>}{vehicle.model}</span>
                         </div>
                         <div className="flex gap-3.5 justify-center mt-1">
                           {[["SİGORTA", vehicle.sigorta.status], ["KASKO", vehicle.kasko.status], ["MUAYENE", vehicle.muayene.status], ["MTV1", vehicle.mtv1?.status || "valid"], ["MTV2", vehicle.mtv2?.status || "valid"]].map(([label, status]) => (

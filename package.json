@@ -66,6 +66,7 @@
     "@supabase/supabase-js": "^2.49.0"
   },
   "devDependencies": {
+    "@netlify/functions": "^2.8.1",
     "@tailwindcss/vite": "4.1.12",
     "@vitejs/plugin-react": "4.7.0",
     "tailwindcss": "4.1.12",

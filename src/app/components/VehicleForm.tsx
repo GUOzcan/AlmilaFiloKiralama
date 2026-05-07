@@ -95,12 +95,12 @@ export function VehicleForm() {
             <FormSelect label="YAKIT" value={formData.fuel || ""} onChange={v => setFormData({ ...formData, fuel: v })} options={["", "Benzin", "Dizel", "Hibrit", "Elektrik", "LPG"]} />
             <FormSelect label="VİTES" value={formData.transmission || ""} onChange={v => setFormData({ ...formData, transmission: v })} options={["", "Otomatik", "Manuel", "Yarı Otomatik"]} />
           </div>
-          <FormField label="KİLOMETRE" type="number" value={formData.mileage?.toString() || ""} onChange={v => setFormData({ ...formData, mileage: v ? parseInt(v) : undefined })} placeholder="15000" />
         </FormSection>
 
         <FormSection title="SAHİPLİK">
           <FormField label="ARAÇ SAHİBİ" value={formData.owner || ""} onChange={v => setFormData({ ...formData, owner: v })} placeholder="Ahmet Yılmaz" />
           <FormField label="RUHSAT SAHİBİ" value={formData.registrationOwner || ""} onChange={v => setFormData({ ...formData, registrationOwner: v })} placeholder="Almila Grup A.Ş." />
+          <FormField label="PROJE" value={formData.projectInfo || ""} onChange={v => setFormData({ ...formData, projectInfo: v })} placeholder="Proje adı veya bilgisi" />
         </FormSection>
 
         <DocSection title="SİGORTA BİTİŞ TARİHİ" data={formData.sigorta!} onChange={d => setFormData({ ...formData, sigorta: d })} />

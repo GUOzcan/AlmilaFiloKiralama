@@ -111,7 +111,7 @@ export function VehicleDetail() {
         )}
 
         {/* Araç Bilgileri: sahip, motor, beygir, km */}
-        {(vehicle.owner || vehicle.registrationOwner || vehicle.engine || vehicle.horsepower || vehicle.mileage) && (
+        {(vehicle.owner || vehicle.registrationOwner || vehicle.projectInfo || vehicle.engine || vehicle.horsepower) && (
           <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.15 }}
             className="bg-[#0d0d0d] border border-white/[0.07] rounded-2xl p-5 mb-4">
             <div className="flex items-center gap-2 mb-4">
@@ -121,9 +121,9 @@ export function VehicleDetail() {
             <div className="space-y-0.5">
               {vehicle.owner             && <InfoRow label="Araç Sahibi"   value={vehicle.owner} />}
               {vehicle.registrationOwner && <InfoRow label="Ruhsat Sahibi" value={vehicle.registrationOwner} />}
+              {vehicle.projectInfo       && <InfoRow label="Proje"         value={vehicle.projectInfo} />}
               {vehicle.engine            && <InfoRow label="Motor"         value={`${vehicle.engine} cc`} />}
               {vehicle.horsepower        && <InfoRow label="Beygir Gücü"   value={`${vehicle.horsepower} kw`} />}
-              {vehicle.mileage           && <InfoRow label="Kilometre"     value={`${vehicle.mileage.toLocaleString("tr-TR")} km`} />}
             </div>
           </motion.div>
         )}

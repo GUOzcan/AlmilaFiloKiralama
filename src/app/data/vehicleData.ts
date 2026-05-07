@@ -22,7 +22,7 @@ export interface Vehicle {
   fuel?: string
   transmission?: string
   color?: string
-  mileage?: number
+  projectInfo?: string
   sigorta: DocField
   kasko: DocField
   mtv1: DocField
@@ -54,7 +54,7 @@ function rowToVehicle(row: any): Vehicle {
     fuel: row.fuel,
     transmission: row.transmission,
     color: row.color,
-    mileage: row.mileage,
+    projectInfo: row.project_info,
     owner: row.owner,
     registrationOwner: row.registration_owner,
     sigorta: { status: row.sigorta_status as StatusType, date: row.sigorta_date, amount: row.sigorta_amount, institution: row.sigorta_institution },
@@ -79,7 +79,7 @@ function vehicleToRow(v: Omit<Vehicle, 'id'>) {
     fuel: c.fuel || null,
     transmission: c.transmission || null,
     color: c.color || null,
-    mileage: c.mileage || null,
+    project_info: c.projectInfo || null,
     owner: c.owner || null,
     registration_owner: c.registrationOwner || null,
     sigorta_status: c.sigorta.status,

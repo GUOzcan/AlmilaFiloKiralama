@@ -1,5 +1,5 @@
 import { Link, useParams } from "react-router"
-import { loadVehicles, StatusType } from "../data/vehicleData"
+import { loadVehicles, normalizeCategory, StatusType } from "../data/vehicleData"
 import { ArrowLeft, Plus, ChevronRight } from "lucide-react"
 import { motion } from "motion/react"
 import { useState, useEffect } from "react"
@@ -14,7 +14,7 @@ export function VehicleList() {
 
   useEffect(() => {
     loadVehicles().then(all => {
-      setVehicles(all.filter(v => v.category === categoryKey))
+      setVehicles(all.filter(v => normalizeCategory(v.category) === categoryKey))
       setLoading(false)
     })
   }, [categoryKey])

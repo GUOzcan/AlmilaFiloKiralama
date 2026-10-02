@@ -1,0 +1,18 @@
+name: Supabase Canli Tut
+on:
+  schedule:
+    - cron: '17 6 * * *'
+  workflow_dispatch: {}
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Supabase ping
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL || 'https://hmkvqrxokqzmlrlnntss.supabase.co' }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY || 'sb_publishable_8OFbcB4CaVB7_lkfK-kwdw_9PfuTa5R' }}
+        run: |
+          code=$(curl -s -o /dev/null -w "%{http_code}" \
+            -H "apikey: $SUPABASE_KEY" -H "Authorization: Bearer $SUPABASE_KEY" \
+            "$SUPABASE_URL/rest/v1/vehicles?select=id&limit=1")
+          echo "ping -> $code"; [ "$code" = "200" ] || exit 1

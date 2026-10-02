@@ -41,10 +41,27 @@ export interface Alert {
   status: StatusType
 }
 
+/**
+ * Kategori değerini toleranslı biçimde normalize eder.
+ * Veritabanında "Yonetim", "yönetim", "YÖNETİM" gibi farklı büyük/küçük harf
+ * veya Türkçe karakter varyasyonlarıyla kaydedilmiş satırların filtrede
+ * "kaybolmasını" önler. "ticari" dışında tanınan her şey Yönetim sayılır ki
+ * hiçbir araç sessizce gizlenmesin.
+ */
+export function normalizeCategory(raw: any): "Yönetim" | "Ticari" {
+  const s = String(raw ?? "")
+    .normalize("NFD")               // aksan/nokta işaretlerini ayır
+    .replace(/[\u0300-\u036f]/g, "") // birlesik aksan isaretlerini kaldir: o-diaeresis->o, I-dot->I
+    .toLowerCase()
+    .trim()
+  if (s.includes("ticari")) return "Ticari"
+  return "Yönetim"
+}
+
 function rowToVehicle(row: any): Vehicle {
   const raw = {
     id: row.id,
-    category: row.category,
+    category: normalizeCategory(row.category),
     licensePlate: row.license_plate,
     brand: row.brand,
     model: row.model,

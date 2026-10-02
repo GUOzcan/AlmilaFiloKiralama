@@ -33,8 +33,12 @@ export function VehicleForm() {
   const handleSubmit = async () => {
     if (!formData.licensePlate || !formData.model) { alert("Plaka ve Model zorunludur."); return }
     setSaving(true)
+    // Kategoriyi URL'den zorla ezme: kullanıcının formda seçtiği kategoriyi
+    // koru. Düzenlemede aracın kendi kategorisi, yeni kayıtta URL'den gelen
+    // varsayılan geçerli olur. Bu, araçların yanlış kategoriye kaymasını önler.
+    const chosenCategory = (formData.category || categoryKey) as "Yönetim" | "Ticari"
     const vehicleData = {
-      ...formData, category: categoryKey,
+      ...formData, category: chosenCategory,
       sigorta: formData.sigorta || emptyDoc,
       kasko: formData.kasko || emptyDoc,
       mtv1: formData.mtv1 || emptyDoc,
@@ -48,7 +52,9 @@ export function VehicleForm() {
     }
     setSaving(false)
     setSaved(true)
-    setTimeout(() => navigate(`/vehicles/${category}`), 800)
+    // Kategori değişmiş olabilir; kaydedilen kategorinin listesine dön
+    const dest = chosenCategory === "Yönetim" ? "yonetim" : "ticari"
+    setTimeout(() => navigate(`/vehicles/${dest}`), 800)
   }
 
   if (loading) return (
@@ -78,6 +84,7 @@ export function VehicleForm() {
         style={{ paddingTop: 'calc(max(16px, env(safe-area-inset-top)) + 56px)' }}>
 
         <FormSection title="ARAÇ BİLGİLERİ">
+          <FormSelect label="KATEGORİ" value={formData.category || categoryKey} onChange={v => setFormData({ ...formData, category: v as "Yönetim" | "Ticari" })} options={["Yönetim", "Ticari"]} />
           <FormField label="PLAKA *" value={formData.licensePlate || ""} onChange={v => setFormData({ ...formData, licensePlate: v.toUpperCase() })} placeholder="06 ABC 123" />
           <div className="grid grid-cols-2 gap-4">
             <FormField label="MARKA" value={formData.brand || ""} onChange={v => setFormData({ ...formData, brand: v })} placeholder="Mercedes-Benz" />

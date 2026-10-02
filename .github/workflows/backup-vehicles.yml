@@ -1,0 +1,52 @@
+name: Araç Verisi Yedekle
+
+# Ne zaman çalışır:
+#  - Her Pazartesi 03:00 UTC (haftalık otomatik yedek)
+#  - İstediğin an "Actions" sekmesinden elle ("Run workflow") tetikleyerek
+#    (ekleme/silme yaptıktan hemen sonra yedek almak istersen)
+on:
+  schedule:
+    - cron: '0 3 * * 1'
+  workflow_dispatch: {}
+
+# Yedek dosyasını repoya geri commit'leyebilmek için yazma izni
+permissions:
+  contents: write
+
+# Aynı anda birden fazla yedek işi çakışmasın
+concurrency:
+  group: vehicles-backup
+  cancel-in-progress: false
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repoyu al
+        uses: actions/checkout@v4
+
+      - name: Node kur
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Supabase'den veriyi çek ve tek dosyaya yaz
+        env:
+          # Depoya gizli anahtar (Settings → Secrets) eklersen onlar kullanılır;
+          # eklemezsen koddaki mevcut publishable (herkese açık) değerlere düşer.
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL || 'https://hmkvqrxokqzmlrlnntss.supabase.co' }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY || 'sb_publishable_8OFbcB4CaVB7_lkfK-kwdw_9PfuTa5R' }}
+        run: node scripts/backup-vehicles.mjs
+
+      - name: Değişiklik varsa tek dosyayı güncelle (commit + push)
+        run: |
+          if [ -n "$(git status --porcelain data/vehicles-backup.json)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add data/vehicles-backup.json
+            git commit -m "chore: araç verisi yedeği güncellendi ($(date -u +%Y-%m-%d))"
+            git push
+            echo "Yedek güncellendi ve push edildi."
+          else
+            echo "Veride değişiklik yok — yeni commit oluşturulmadı."
+          fi

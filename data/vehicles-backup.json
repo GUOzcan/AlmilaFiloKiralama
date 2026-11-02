@@ -352,7 +352,7 @@
     "sigorta_amount": null,
     "sigorta_institution": null,
     "kasko_status": "valid",
-    "kasko_date": null,
+    "kasko_date": "2027-10-27",
     "kasko_amount": null,
     "kasko_institution": null,
     "mtv_status": "valid",

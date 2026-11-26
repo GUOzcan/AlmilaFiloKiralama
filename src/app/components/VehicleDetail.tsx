@@ -49,16 +49,15 @@ export function VehicleDetail() {
     </div>
   )
 
-  const allStatuses = [vehicle.sigorta.status, vehicle.kasko.status, vehicle.muayene.status, vehicle.mtv1?.status || "valid", vehicle.mtv2?.status || "valid"]
+  const allStatuses = [vehicle.sigorta.status, vehicle.kasko.status, vehicle.muayene.status]
   const overallStatus = allStatuses.includes("expired") ? "expired" : allStatuses.includes("warning") ? "warning" : "valid"
   const overallConfig = getStatusConfig(overallStatus)
+  const showProject = vehicle.category !== "Ticari"
 
   const docs = [
     { title: "Sigorta",       status: vehicle.sigorta.status,           date: vehicle.sigorta.date },
     { title: "Kasko",         status: vehicle.kasko.status,             date: vehicle.kasko.date },
     { title: "Muayene",       status: vehicle.muayene.status,           date: vehicle.muayene.date },
-    { title: "MTV 1. Taksit", status: vehicle.mtv1?.status || "valid",  date: vehicle.mtv1?.date },
-    { title: "MTV 2. Taksit", status: vehicle.mtv2?.status || "valid",  date: vehicle.mtv2?.date },
   ]
 
   return (
@@ -110,8 +109,8 @@ export function VehicleDetail() {
           </motion.div>
         )}
 
-        {/* Araç Bilgileri: sahip, motor, beygir, km */}
-        {(vehicle.owner || vehicle.registrationOwner || vehicle.projectInfo || vehicle.engine || vehicle.horsepower) && (
+        {/* Araç Bilgileri: sahip, ruhsat sahibi, proje (Ticari'de proje gösterilmez) */}
+        {(vehicle.owner || vehicle.registrationOwner || (showProject && vehicle.projectInfo)) && (
           <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.15 }}
             className="bg-[#0d0d0d] border border-white/[0.07] rounded-2xl p-5 mb-4">
             <div className="flex items-center gap-2 mb-4">
@@ -121,9 +120,7 @@ export function VehicleDetail() {
             <div className="space-y-0.5">
               {vehicle.owner             && <InfoRow label="Araç Sahibi"   value={vehicle.owner} />}
               {vehicle.registrationOwner && <InfoRow label="Ruhsat Sahibi" value={vehicle.registrationOwner} />}
-              {vehicle.projectInfo       && <InfoRow label="Proje"         value={vehicle.projectInfo} />}
-              {vehicle.engine            && <InfoRow label="Motor"         value={`${vehicle.engine} cc`} />}
-              {vehicle.horsepower        && <InfoRow label="Beygir Gücü"   value={`${vehicle.horsepower} kw`} />}
+              {showProject && vehicle.projectInfo && <InfoRow label="Proje" value={vehicle.projectInfo} />}
             </div>
           </motion.div>
         )}

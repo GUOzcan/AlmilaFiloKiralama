@@ -28,7 +28,7 @@ export function VehicleList() {
   }
 
   const getWorstStatus = (v: any): StatusType => {
-    const s = [v.sigorta.status, v.kasko.status, v.muayene.status, v.mtv1?.status || "valid", v.mtv2?.status || "valid"]
+    const s = [v.sigorta.status, v.kasko.status, v.muayene.status]
     if (s.includes("expired")) return "expired"
     if (s.includes("warning")) return "warning"
     return "valid"
@@ -100,9 +100,9 @@ export function VehicleList() {
                           <span className="inline-block bg-white text-black px-2.5 py-0.5 text-[10px] font-bold tracking-widest rounded-sm flex-shrink-0">{vehicle.licensePlate}</span>
                           <span className="text-sm truncate">{vehicle.brand && <span className="font-bold text-neutral-200">{vehicle.brand} </span>}{vehicle.model && <span className="font-light text-neutral-200">{vehicle.model}</span>}</span>
                         </div>
-                        <div className="flex gap-3.5 justify-center mt-1">
-                          {[["SİGORTA", vehicle.sigorta.status], ["KASKO", vehicle.kasko.status], ["MUAYENE", vehicle.muayene.status], ["MTV1", vehicle.mtv1?.status || "valid"], ["MTV2", vehicle.mtv2?.status || "valid"]].map(([label, status]) => (
-                            <div key={label} className="flex items-center gap-1.5">
+                        <div className="grid grid-cols-3 mt-1">
+                          {[["SİGORTA", vehicle.sigorta.status], ["KASKO", vehicle.kasko.status], ["MUAYENE", vehicle.muayene.status]].map(([label, status]) => (
+                            <div key={label} className="flex items-center justify-center gap-1.5">
                               <div className={`w-1.5 h-1.5 rounded-full ${getStatusColor(status as StatusType)}`} />
                               <span className="text-[8px] tracking-[0.15em] text-neutral-600">{label}</span>
                             </div>
